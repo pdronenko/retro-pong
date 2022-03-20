@@ -9,9 +9,7 @@ import { Observable } from 'rxjs';
 export class ApiService {
   private readonly baseHref = `${location.origin}/api`;
 
-  constructor(private httpClient: HttpClient) {
-    console.log('baseHref', this.baseHref);
-  }
+  constructor(private httpClient: HttpClient) {}
 
   postStartGame(): Observable<void> {
     return this.httpClient.post<void>(`${this.baseHref}/${ApiRoutesEnum.GAME}`, null);

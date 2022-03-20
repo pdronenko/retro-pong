@@ -10,11 +10,7 @@ import {
   SocketEventEnum,
 } from '@retro-pong/api-interfaces';
 
-@WebSocketGateway(8988, {
-  cors: {
-    origin: '*',
-  },
-})
+@WebSocketGateway(8988)
 export class GameService {
   @WebSocketServer()
   private server: Server;
