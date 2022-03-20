@@ -15,7 +15,7 @@
 
   &.right {
     background-color: $player-color-2;
-    top: $game-box-indent;
+    bottom: $game-box-indent;
     right: 0;
   }
 
@@ -27,7 +27,7 @@
 
   &.left {
     background-color: $player-color-4;
-    top: $game-box-indent;
+    bottom: $game-box-indent;
     left: 0;
   }
 }

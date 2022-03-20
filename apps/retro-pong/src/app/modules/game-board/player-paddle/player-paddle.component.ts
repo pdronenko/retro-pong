@@ -30,7 +30,7 @@ export class PlayerPaddleComponent {
       case SideEnum.RIGHT:
         this.height = `${paddle.width}px`;
         this.width = `${this.paddleIndent}px`;
-        this.transform = `translateY(-50%) translateY(${paddle.position}px)`;
+        this.transform = `translateY(50%) translateY(${-paddle.position}px)`;
         break;
     }
   }

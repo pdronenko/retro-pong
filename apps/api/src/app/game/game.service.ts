@@ -26,8 +26,8 @@ export class GameService {
   private readonly paddleShiftMapper = {
     [ArrowDirectionEnum.LEFT]: -this.paddleShift,
     [ArrowDirectionEnum.RIGHT]: this.paddleShift,
-    [ArrowDirectionEnum.UP]: -this.paddleShift,
-    [ArrowDirectionEnum.DOWN]: this.paddleShift,
+    [ArrowDirectionEnum.UP]: this.paddleShift,
+    [ArrowDirectionEnum.DOWN]: -this.paddleShift,
   };
 
   private gameState: GameStateInterface = {
@@ -39,14 +39,14 @@ export class GameService {
   private players: Record<SideEnum, PlayerInterface> = {
     [SideEnum.BOTTOM]: {
       side: SideEnum.BOTTOM,
-      width: 100,
+      width: 600,
       position: 300,
       name: 'Pavel',
       axis: 'x',
     },
     [SideEnum.RIGHT]: {
       side: SideEnum.RIGHT,
-      width: 600,
+      width: 100,
       position: 300,
       name: 'Pavel',
       axis: 'y',
