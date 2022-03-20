@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "api-interfaces": "libs/api-interfaces",
+    "retro-pong": "apps/retro-pong",
+    "retro-pong-e2e": "apps/retro-pong-e2e"
+  }
+}

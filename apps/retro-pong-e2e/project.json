@@ -1,0 +1,28 @@
+{
+  "root": "apps/retro-pong-e2e",
+  "sourceRoot": "apps/retro-pong-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/retro-pong-e2e/cypress.json",
+        "devServerTarget": "retro-pong:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "retro-pong:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/retro-pong-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["retro-pong"]
+}
