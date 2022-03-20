@@ -6,6 +6,7 @@
   transition-property: transform;
   transition-timing-function: linear;
   transition-duration: $player-animation-duration;
+  border-radius: $paddle-radius;
 
   &.bottom {
     background-color: $player-color-1;

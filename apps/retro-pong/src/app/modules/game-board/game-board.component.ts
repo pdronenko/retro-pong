@@ -24,7 +24,7 @@ import { GameBoardService } from './game-board.service';
   styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
-  activePlayer = SideEnum.RIGHT; // how to get? not websocket I think
+  activePlayer = SideEnum.TOP; // how to get? not websocket I think
 
   gameState$: Observable<GameStateInterface>;
 

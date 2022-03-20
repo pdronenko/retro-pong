@@ -46,14 +46,14 @@ export class GameService {
     },
     [SideEnum.RIGHT]: {
       side: SideEnum.RIGHT,
-      width: 100,
+      width: 600,
       position: 300,
       name: 'Pavel',
       axis: 'y',
     },
     [SideEnum.TOP]: {
       side: SideEnum.TOP,
-      width: 600,
+      width: 100,
       position: 300,
       name: 'Pavel',
       axis: 'x',
