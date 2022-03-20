@@ -19,16 +19,16 @@ export class GameBoardService {
 
   startGame(): void {
     // todo body?
-    this.httpClient.post<void>('http://localhost:8080/api/start-game', {}).subscribe();
+    this.httpClient.post<void>('http://localhost:3333/api/start-game', {}).subscribe();
   }
 
   connect(): void {
-    this.httpClient.get<GameStateInterface>('http://localhost:8080/api/game-state').subscribe((state) => {
+    this.httpClient.get<GameStateInterface>('http://localhost:3333/api/game-state').subscribe((state) => {
       this.gameState$.next(state); // todo move subscribe somewhere?
     });
 
     this.httpClient
-      .get<Record<SideEnum, PlayerInterface>>('http://localhost:8080/api/player-state')
+      .get<Record<SideEnum, PlayerInterface>>('http://localhost:3333/api/player-state')
       .subscribe((state) => {
         this.playerBottom$.next(state[SideEnum.BOTTOM]);
         this.playerRight$.next(state[SideEnum.RIGHT]);
