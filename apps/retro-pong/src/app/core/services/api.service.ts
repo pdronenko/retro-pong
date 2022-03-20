@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-  private readonly baseHref = `${location.origin}/api/`;
+  private readonly baseHref = `${location.origin}/api`;
 
   constructor(private httpClient: HttpClient) {
     console.log('baseHref', this.baseHref);
