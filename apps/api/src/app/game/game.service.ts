@@ -43,11 +43,17 @@ export class GameService {
     return this.players;
   }
 
-  public startGame(side: SideEnum): void {
+  public activatePlayer(side: SideEnum): void {
     this.players[side].activate();
+    this.gameState.activePlayersCount += 1;
     this.server.emit(SocketEventEnum.PLAYER_UPDATE, this.players[side]);
-
     if (this.gameState.status === GameStatusEnum.IDLE) {
+      this.startGame();
+    }
+  }
+
+  private startGame(): void {
+    if (this.gameState.activePlayersCount > 0) {
       this.gameState.startWithDelay().subscribe(
         () => this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState),
         (err) => console.log(err),
@@ -75,6 +81,8 @@ export class GameService {
       if (Geometry.isPlayerMissedTheBall(player.width, player.position, gameState.ballDirection[player.axis])) {
         this.resetGameState();
         this.resetPlayer(player.side);
+        this.gameState.activePlayersCount -= 1;
+        this.startGame();
         return;
       }
       this.setNewBallCoordinates(this.gameState);

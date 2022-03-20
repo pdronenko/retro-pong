@@ -20,7 +20,7 @@ export class AppController {
   @Post(ApiRoutesEnum.GAME)
   startGame(@Body() body: { side: SideEnum }): { side } {
     const { side } = body;
-    this.gameService.startGame(side);
+    this.gameService.activatePlayer(side);
     return { side };
   }
 }

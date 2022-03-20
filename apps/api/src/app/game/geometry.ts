@@ -6,6 +6,7 @@ export class Geometry {
   static readonly paddleShift = 20;
   static readonly ballSpeed = 0.5;
   static readonly activePaddleWidth = 150;
+  static readonly countdown = 3;
 
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;

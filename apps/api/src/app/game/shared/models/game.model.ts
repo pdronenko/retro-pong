@@ -12,6 +12,7 @@ export class GameModel implements GameInterface {
   };
   ballSpeed = Geometry.ballSpeed;
   status = GameStatusEnum.IDLE;
+  activePlayersCount = 0;
   count = null;
 
   reset(): void {
@@ -26,8 +27,8 @@ export class GameModel implements GameInterface {
     return timer(0, 1000).pipe(
       take(4),
       tap((num) => {
-        if (num < 3) {
-          this.count = 3 - num;
+        if (num < Geometry.countdown) {
+          this.count = Geometry.countdown - num;
         } else {
           this.count = null;
           this.status = GameStatusEnum.PLAYING;
