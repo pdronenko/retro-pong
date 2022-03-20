@@ -19,6 +19,9 @@
           "apps/retro-pong/src/assets"
         ],
         "styles": ["apps/retro-pong/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/retro-pong/src/assets/styles/variables.scss"]
+        },
         "scripts": []
       },
       "configurations": {

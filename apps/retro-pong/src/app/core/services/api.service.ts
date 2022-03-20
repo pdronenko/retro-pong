@@ -14,14 +14,14 @@ export class ApiService {
   }
 
   postStartGame(): Observable<void> {
-    return this.httpClient.post<void>(`${this.baseHref}/${ApiRoutesEnum.START_GAME}`, null);
+    return this.httpClient.post<void>(`${this.baseHref}/${ApiRoutesEnum.GAME}`, null);
   }
 
   getGameState(): Observable<GameStateInterface> {
-    return this.httpClient.get<GameStateInterface>(`${this.baseHref}/${ApiRoutesEnum.GAME_STATE}`);
+    return this.httpClient.get<GameStateInterface>(`${this.baseHref}/${ApiRoutesEnum.GAME}`);
   }
 
   getPlayersState(): Observable<Record<SideEnum, PlayerInterface>> {
-    return this.httpClient.get<Record<SideEnum, PlayerInterface>>(`${this.baseHref}/${ApiRoutesEnum.PLAYER_STATE}`);
+    return this.httpClient.get<Record<SideEnum, PlayerInterface>>(`${this.baseHref}/${ApiRoutesEnum.PLAYERS}`);
   }
 }

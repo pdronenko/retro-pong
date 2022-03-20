@@ -46,6 +46,7 @@ export class GameBoardService {
       console.log('SOCKET IN', SocketEventEnum.PLAYER_UPDATE);
       switch (playerUpdate.side) {
         case SideEnum.BOTTOM:
+          console.log('bottom', playerUpdate);
           this.playerBottom$.next(playerUpdate);
           break;
         case SideEnum.RIGHT:

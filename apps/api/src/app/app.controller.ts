@@ -7,17 +7,17 @@ import { GameService } from './game/game.service';
 export class AppController {
   constructor(private readonly gameService: GameService) {}
 
-  @Get(ApiRoutesEnum.GAME_STATE)
+  @Get(ApiRoutesEnum.GAME)
   getGame(): GameStateInterface {
     return this.gameService.getGameState();
   }
 
-  @Get(ApiRoutesEnum.PLAYER_STATE)
+  @Get(ApiRoutesEnum.PLAYERS)
   getPlayers(): Record<SideEnum, PlayerInterface> {
     return this.gameService.getPlayersState();
   }
 
-  @Post(ApiRoutesEnum.START_GAME)
+  @Post(ApiRoutesEnum.GAME)
   startGame(): void {
     this.gameService.startGame();
   }

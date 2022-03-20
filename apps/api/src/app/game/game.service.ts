@@ -84,7 +84,7 @@ export class GameService {
   }
 
   public startGame(): void {
-    this.gameState.gameOver = false;
+    this.resetGameState();
     this.setNewBallCoordinates(this.gameState);
   }
 
@@ -100,18 +100,23 @@ export class GameService {
     return this.players[payload.side];
   }
 
+  private resetGameState(): void {
+    this.gameState.gameOver = false;
+    this.gameState.ballPosition.x = 300;
+    this.gameState.ballPosition.y = 300;
+  }
+
   private setNewBallCoordinates(gameState: GameStateInterface): void {
-    // todo naming
-    const player = this.players[gameState.ballPosition.side];
-    if (this.isPlayerMissedTheBall(player.width, player.position, gameState.ballPosition[player.axis])) {
-      this.gameState.gameOver = true;
-      this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
-      return;
-    }
     const newPosition = this.calcBallNewDirection(gameState);
     this.gameState.ballPosition = newPosition;
     this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
     setTimeout(() => {
+      const player = this.players[gameState.ballPosition.side];
+      if (this.isPlayerMissedTheBall(player.width, player.position, gameState.ballPosition[player.axis])) {
+        this.gameState.gameOver = true;
+        this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
+        return;
+      }
       this.setNewBallCoordinates(this.gameState);
     }, newPosition.distance / this.gameState.ballSpeed);
   }

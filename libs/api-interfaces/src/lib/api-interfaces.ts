@@ -46,7 +46,6 @@ export enum ArrowDirectionEnum {
 }
 
 export enum ApiRoutesEnum {
-  GAME_STATE = 'game-state',
-  PLAYER_STATE = 'player-state',
-  START_GAME = 'start-game',
+  GAME = 'game',
+  PLAYERS = 'players',
 }

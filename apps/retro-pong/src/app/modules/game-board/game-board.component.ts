@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { GameStateInterface, PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 import {
   distinctUntilKeyChanged,
@@ -35,7 +35,11 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   private keySub: SubscriptionLike;
 
-  constructor(private gameBoardService: GameBoardService, @Inject(DOCUMENT) private document: Document) {}
+  constructor(
+    private gameBoardService: GameBoardService,
+    @Inject(DOCUMENT) private document: Document,
+    private zone: NgZone
+  ) {}
 
   ngOnInit(): void {
     this.gameState$ = this.gameBoardService.gameState$;
@@ -45,7 +49,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.playerLeft$ = this.gameBoardService.playerLeft$;
 
     this.gameBoardService.connect();
-    this.takeControl();
+    this.zone.runOutsideAngular(() => {
+      this.takeControl();
+    });
   }
 
   ngOnDestroy(): void {

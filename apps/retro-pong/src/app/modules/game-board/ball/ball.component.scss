@@ -1,0 +1,16 @@
+@import "../../../../assets/styles/variables";
+
+:host {
+  background-color: $ball-color;
+  height: $ball-diameter;
+  width: $ball-diameter;
+  display: block;
+  position: absolute;
+  left: $ball-indent;
+  bottom: $ball-indent;
+  transform-origin: center center;
+  will-change: transform;
+  transition-property: transform;
+  transition-timing-function: linear;
+  border-radius: 50%;
+}

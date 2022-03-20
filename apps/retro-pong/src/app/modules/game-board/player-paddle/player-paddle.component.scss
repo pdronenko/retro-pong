@@ -1,0 +1,33 @@
+@import "../../../../assets/styles/variables";
+
+:host {
+  position: absolute;
+  will-change: transform;
+  transition-property: transform;
+  transition-timing-function: linear;
+  transition-duration: $player-animation-duration;
+
+  &.bottom {
+    background-color: $player-color-1;
+    left: $game-box-indent;
+    bottom: 0;
+  }
+
+  &.right {
+    background-color: $player-color-2;
+    top: $game-box-indent;
+    right: 0;
+  }
+
+  &.top {
+    background-color: $player-color-3;
+    left: $game-box-indent;
+    top: 0;
+  }
+
+  &.left {
+    background-color: $player-color-4;
+    top: $game-box-indent;
+    left: 0;
+  }
+}
