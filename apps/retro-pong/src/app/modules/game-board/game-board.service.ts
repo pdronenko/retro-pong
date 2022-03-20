@@ -19,23 +19,20 @@ export class GameBoardService {
   constructor(private socket: Socket, private httpClient: HttpClient, private apiService: ApiService) {}
 
   startGame(): void {
-    // todo body?
-    this.httpClient.post<void>('http://localhost:3333/api/start-game', {}).subscribe();
+    this.apiService.postStartGame().subscribe(); // todo naming
   }
 
   connect(): void {
-    this.httpClient.get<GameStateInterface>('http://localhost:3333/api/game-state').subscribe((state) => {
+    this.apiService.getGameState().subscribe((state) => {
       this.gameState$.next(state); // todo move subscribe somewhere?
     });
 
-    this.httpClient
-      .get<Record<SideEnum, PlayerInterface>>('http://localhost:3333/api/player-state')
-      .subscribe((state) => {
-        this.playerBottom$.next(state[SideEnum.BOTTOM]);
-        this.playerRight$.next(state[SideEnum.RIGHT]);
-        this.playerTop$.next(state[SideEnum.TOP]);
-        this.playerLeft$.next(state[SideEnum.LEFT]);
-      });
+    this.apiService.getPlayersState().subscribe((state) => {
+      this.playerBottom$.next(state[SideEnum.BOTTOM]);
+      this.playerRight$.next(state[SideEnum.RIGHT]);
+      this.playerTop$.next(state[SideEnum.TOP]);
+      this.playerLeft$.next(state[SideEnum.LEFT]);
+    });
 
     this.socket.on(SocketEventEnum.GAME_UPDATE, (payload: GameStateInterface) => {
       console.log('SOCKET IN', SocketEventEnum.GAME_UPDATE);
@@ -62,6 +59,11 @@ export class GameBoardService {
           break;
       }
     });
+  }
+
+  disconnect(): void {
+    this.socket.removeAllListeners(SocketEventEnum.PLAYER_UPDATE);
+    this.socket.removeAllListeners(SocketEventEnum.GAME_UPDATE);
   }
 
   sendPlayerUpdate(dir: string, side: SideEnum): void {
