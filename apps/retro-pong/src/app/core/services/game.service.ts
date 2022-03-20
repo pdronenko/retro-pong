@@ -2,13 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameStateInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
 import { Socket } from 'ngx-socket-io';
-import { ReplaySubject } from 'rxjs';
-import { ApiService } from '../../core/services/api.service';
+import { BehaviorSubject, Observable, ReplaySubject, tap } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GameBoardService {
+export class GameService {
+  currentPlayerSide$ = new ReplaySubject<SideEnum>(1);
+
   playerBottom$ = new ReplaySubject<PlayerInterface>(1);
   playerRight$ = new ReplaySubject<PlayerInterface>(1);
   playerTop$ = new ReplaySubject<PlayerInterface>(1);
@@ -18,24 +20,29 @@ export class GameBoardService {
 
   constructor(private socket: Socket, private httpClient: HttpClient, private apiService: ApiService) {}
 
-  startGame(): void {
-    this.apiService.postStartGame().subscribe(); // todo naming
+  startGame(playerSide: SideEnum): Observable<string> {
+    return this.apiService
+      .postStartGame(playerSide)
+      .pipe(tap((response) => response === 'OK' && this.currentPlayerSide$.next(playerSide)));
+  }
+
+  getGameState(): Observable<GameStateInterface> {
+    return this.apiService.getGameState().pipe(tap((state) => this.gameState$.next(state)));
+  }
+
+  getPlayerState(): Observable<Record<SideEnum, PlayerInterface>> {
+    return this.apiService.getPlayersState().pipe(
+      tap((state) => {
+        this.playerBottom$.next(state[SideEnum.BOTTOM]);
+        this.playerRight$.next(state[SideEnum.RIGHT]);
+        this.playerTop$.next(state[SideEnum.TOP]);
+        this.playerLeft$.next(state[SideEnum.LEFT]);
+      })
+    );
   }
 
   connect(): void {
-    this.apiService.getGameState().subscribe((state) => {
-      this.gameState$.next(state); // todo move subscribe somewhere?
-    });
-
-    this.apiService.getPlayersState().subscribe((state) => {
-      this.playerBottom$.next(state[SideEnum.BOTTOM]);
-      this.playerRight$.next(state[SideEnum.RIGHT]);
-      this.playerTop$.next(state[SideEnum.TOP]);
-      this.playerLeft$.next(state[SideEnum.LEFT]);
-    });
-
     this.socket.on(SocketEventEnum.GAME_UPDATE, (payload: GameStateInterface) => {
-      console.log('SOCKET IN', SocketEventEnum.GAME_UPDATE);
       if (payload.gameOver) {
         alert('GAME OVER');
       }
@@ -43,10 +50,8 @@ export class GameBoardService {
     });
 
     this.socket.on(SocketEventEnum.PLAYER_UPDATE, (playerUpdate: PlayerInterface) => {
-      console.log('SOCKET IN', SocketEventEnum.PLAYER_UPDATE);
       switch (playerUpdate.side) {
         case SideEnum.BOTTOM:
-          console.log('bottom', playerUpdate);
           this.playerBottom$.next(playerUpdate);
           break;
         case SideEnum.RIGHT:

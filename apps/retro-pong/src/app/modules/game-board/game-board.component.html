@@ -1,12 +1,7 @@
-<section class="game-wrapper">
-  <div class="game-interface">
-    <button (click)="startGame()">PLAY</button>
-  </div>
-  <div *ngIf="gameState$ | async as gameState" class="game-box">
-    <pong-player-paddle class="bottom" *ngIf="playerBottom$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
-    <pong-player-paddle class="right" *ngIf="playerRight$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
-    <pong-player-paddle class="top" *ngIf="playerTop$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
-    <pong-player-paddle class="left" *ngIf="playerLeft$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
-    <pong-ball [ballSpeed]="gameState.ballSpeed" [position]="gameState.ballPosition"></pong-ball>
-  </div>
-</section>
+<ng-container *ngIf="gameState$ | async as gameState">
+  <pong-player-paddle class="bottom" *ngIf="playerBottom$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
+  <pong-player-paddle class="right" *ngIf="playerRight$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
+  <pong-player-paddle class="top" *ngIf="playerTop$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
+  <pong-player-paddle class="left" *ngIf="playerLeft$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
+  <pong-ball [ballSpeed]="gameState.ballSpeed" [position]="gameState.ballPosition"></pong-ball>
+</ng-container>

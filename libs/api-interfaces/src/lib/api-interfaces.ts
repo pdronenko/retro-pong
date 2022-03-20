@@ -10,6 +10,7 @@ export interface PlayerInterface {
   position: number;
   name: string;
   axis: 'x' | 'y';
+  active: boolean;
 }
 
 export interface PlayerPayloadInterface {

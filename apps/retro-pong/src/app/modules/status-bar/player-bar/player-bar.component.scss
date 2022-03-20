@@ -1,0 +1,34 @@
+@import "../../../../assets/styles/variables";
+
+:host {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .player-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+
+  &.bottom .player-color {
+    background-color: $player-color-1;
+  }
+
+  &.right .player-color {
+    background-color: $player-color-2;
+  }
+
+  &.top .player-color {
+    background-color: $player-color-3;
+  }
+
+  &.left .player-color {
+    background-color: $player-color-4;
+  }
+
+  .player-name {
+    font-size: 10px;
+  }
+}

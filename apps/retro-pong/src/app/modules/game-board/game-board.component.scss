@@ -1,19 +1,9 @@
 @import "../../../assets/styles/variables";
 
-.game-wrapper {
-  width: 100vw;
-  height: 100vh;
-  background-color: $game-surround-background;
-  padding-top: 100px;
-  display: flex;
-  justify-content: center;
-
-  .game-box {
-    //border: $ball-diameter / 2 solid $game-box-background-color;
-    background-color: $game-box-background-color;
-    width: $game-box-size + $game-box-indent * 2;
-    height: $game-box-size + $game-box-indent * 2;
-    position: relative;
-    border-radius: $radius;
-  }
+:host {
+  width: $game-box-size + $game-box-indent * 2;
+  height: $game-box-size + $game-box-indent * 2;
+  background-color: $game-box-background-color;
+  position: relative;
+  border-radius: $radius;
 }

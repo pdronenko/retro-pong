@@ -1,1 +1,11 @@
-<p>status-bar works!</p>
+<h1 class="heading">Retro Pong</h1>
+<nav class="player-status-wrapper">
+  <pong-player-bar *ngIf="playerBottom$ | async as player" class="bottom" [player]="player"
+                   (startGame)="startGame($event)"></pong-player-bar>
+  <pong-player-bar *ngIf="playerRight$ | async as player" class="right" [player]="player"
+                   (startGame)="startGame($event)"></pong-player-bar>
+  <pong-player-bar *ngIf="playerTop$ | async as player" class="top" [player]="player"
+                   (startGame)="startGame($event)"></pong-player-bar>
+  <pong-player-bar *ngIf="playerLeft$ | async as player" class="left" [player]="player"
+                   (startGame)="startGame($event)"></pong-player-bar>
+</nav>

@@ -1,0 +1,6 @@
+<div class="player-color bottom"></div>
+<button type="button" class="nes-btn" (click)="startGame.emit(player.side)"
+        *ngIf="!player.active; else playerName">START</button>
+<ng-template #playerName>
+  <p class="player-name">{{ player.name }}</p>
+</ng-template>

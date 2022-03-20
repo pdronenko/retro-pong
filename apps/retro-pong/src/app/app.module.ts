@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
-import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { GameBoardModule } from './modules/game-board/game-board.module';
@@ -17,7 +16,6 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     HttpClientModule,
     RouterModule,
-    AppRoutingModule,
     StatusBarModule,
     GameBoardModule,
   ],

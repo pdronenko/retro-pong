@@ -9,14 +9,14 @@ import {
   map,
   merge,
   Observable,
-  SubscriptionLike,
+  Subscription,
   switchMap,
   tap,
   timer,
 } from 'rxjs';
 import { directionMapper } from '../../core/consts/direction-mapper';
 import { KeyboardEventEnum } from '../../core/enums/keyboard-event.enum';
-import { GameBoardService } from './game-board.service';
+import { GameService } from '../../core/services/game.service';
 
 @Component({
   selector: 'pong-game-board',
@@ -24,8 +24,6 @@ import { GameBoardService } from './game-board.service';
   styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
-  activePlayer = SideEnum.TOP; // how to get? not websocket I think
-
   gameState$: Observable<GameStateInterface>;
 
   playerBottom$: Observable<PlayerInterface>;
@@ -33,60 +31,62 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   playerTop$: Observable<PlayerInterface>;
   playerLeft$: Observable<PlayerInterface>;
 
-  private keySub: SubscriptionLike;
+  private currentPlayerSide: SideEnum;
 
-  constructor(
-    private gameBoardService: GameBoardService,
-    @Inject(DOCUMENT) private document: Document,
-    private zone: NgZone
-  ) {}
+  private subs = new Subscription();
+
+  constructor(private gameService: GameService, @Inject(DOCUMENT) private document: Document, private zone: NgZone) {}
 
   ngOnInit(): void {
-    this.gameState$ = this.gameBoardService.gameState$;
-    this.playerBottom$ = this.gameBoardService.playerBottom$;
-    this.playerRight$ = this.gameBoardService.playerRight$;
-    this.playerTop$ = this.gameBoardService.playerTop$;
-    this.playerLeft$ = this.gameBoardService.playerLeft$;
+    this.gameState$ = this.gameService.gameState$;
+    this.playerBottom$ = this.gameService.playerBottom$;
+    this.playerRight$ = this.gameService.playerRight$;
+    this.playerTop$ = this.gameService.playerTop$;
+    this.playerLeft$ = this.gameService.playerLeft$;
 
-    this.gameBoardService.connect();
-    this.zone.runOutsideAngular(() => {
-      this.takeControl();
-    });
+    this.gameService.connect();
+    this.subs.add(this.gameService.getGameState().subscribe());
+    this.subs.add(this.gameService.getPlayerState().subscribe());
+    this.subs.add(
+      this.gameService.currentPlayerSide$
+        .pipe(filter((currentPlayerSide) => currentPlayerSide in SideEnum))
+        .subscribe(() => {
+          this.zone.runOutsideAngular(() => {
+            this.takeControl();
+          });
+        })
+    );
   }
 
   ngOnDestroy(): void {
-    this.keySub?.unsubscribe();
-  }
-
-  startGame(): void {
-    this.gameBoardService.startGame();
+    this.subs.unsubscribe();
   }
 
   private takeControl(): void {
-    this.keySub = merge(
-      fromEvent<KeyboardEvent>(this.document, 'keydown'),
-      fromEvent<KeyboardEvent>(this.document, 'keyup')
-    )
-      .pipe(
-        tap((event) => event.preventDefault()),
-        filter((event) => {
-          return this.activePlayer === SideEnum.BOTTOM || this.activePlayer === SideEnum.TOP
-            ? event.key === KeyboardEventEnum.LEFT || event.key === KeyboardEventEnum.RIGHT
-            : event.key === KeyboardEventEnum.UP || event.key === KeyboardEventEnum.DOWN;
-        }),
-        distinctUntilKeyChanged('type'),
-        switchMap((event) => {
-          if (event.type === 'keydown') {
-            const direction = directionMapper[event.key as KeyboardEventEnum];
-            return timer(0, 50).pipe(map(() => direction));
-          } else {
-            return EMPTY;
-          }
-        }),
-        filter(Boolean)
-      )
-      .subscribe((direction) => {
-        this.gameBoardService.sendPlayerUpdate(direction, this.activePlayer);
-      });
+    this.subs.add(
+      merge(fromEvent<KeyboardEvent>(this.document, 'keydown'), fromEvent<KeyboardEvent>(this.document, 'keyup'))
+        .pipe(
+          tap((event) => event.preventDefault()),
+          filter((event) => {
+            if (!(this.currentPlayerSide in SideEnum)) return false;
+            return this.currentPlayerSide === SideEnum.BOTTOM || this.currentPlayerSide === SideEnum.TOP
+              ? event.key === KeyboardEventEnum.LEFT || event.key === KeyboardEventEnum.RIGHT
+              : event.key === KeyboardEventEnum.UP || event.key === KeyboardEventEnum.DOWN;
+          }),
+          distinctUntilKeyChanged('type'),
+          switchMap((event) => {
+            if (event.type === 'keydown') {
+              const direction = directionMapper[event.key as KeyboardEventEnum];
+              return timer(0, 50).pipe(map(() => direction));
+            } else {
+              return EMPTY;
+            }
+          }),
+          filter(Boolean)
+        )
+        .subscribe((direction) => {
+          this.gameService.sendPlayerUpdate(direction, this.currentPlayerSide);
+        })
+    );
   }
 }
