@@ -18,6 +18,7 @@ export class GameService {
   private readonly paddleShift = 20;
   private readonly fieldSize = 600;
   private readonly ballSpeed = 0.5;
+  private readonly activePaddleWidth = 150;
 
   private readonly paddleShiftMapper = {
     [ArrowDirectionEnum.LEFT]: -this.paddleShift,
