@@ -1,11 +1,11 @@
 <h1 class="heading">Retro Pong</h1>
 <nav class="player-status-wrapper">
+  <pong-player-bar *ngIf="playerLeft$ | async as player" [disabled]="playing" class="left" [player]="player"
+                   (startGame)="startGame($event)"></pong-player-bar>
   <pong-player-bar *ngIf="playerBottom$ | async as player" [disabled]="playing" class="bottom" [player]="player"
                    (startGame)="startGame($event)"></pong-player-bar>
-  <pong-player-bar *ngIf="playerRight$ | async as player" [disabled]="playing" class="right" [player]="player"
-                   (startGame)="startGame($event)"></pong-player-bar>
   <pong-player-bar *ngIf="playerTop$ | async as player" [disabled]="playing" class="top" [player]="player"
-                   (startGame)="startGame($event)"></pong-player-bar>
-  <pong-player-bar *ngIf="playerLeft$ | async as player" [disabled]="playing" class="left" [player]="player"
+  (startGame)="startGame($event)"></pong-player-bar>
+  <pong-player-bar *ngIf="playerRight$ | async as player" [disabled]="playing" class="right" [player]="player"
                    (startGame)="startGame($event)"></pong-player-bar>
 </nav>

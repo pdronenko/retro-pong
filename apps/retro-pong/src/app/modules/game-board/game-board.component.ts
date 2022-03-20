@@ -10,6 +10,7 @@ import {
   merge,
   Observable,
   Subscription,
+  SubscriptionLike,
   switchMap,
   tap,
   timer,
@@ -34,6 +35,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   private currentPlayerSide: SideEnum | null;
 
   private subs = new Subscription();
+  private keySub: SubscriptionLike;
 
   constructor(private gameService: GameService, @Inject(DOCUMENT) private document: Document, private zone: NgZone) {}
 
@@ -61,33 +63,36 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+    this.keySub?.unsubscribe();
   }
 
   private takeControl(): void {
-    this.subs.add(
-      merge(fromEvent<KeyboardEvent>(this.document, 'keydown'), fromEvent<KeyboardEvent>(this.document, 'keyup'))
-        .pipe(
-          tap((event) => event.preventDefault()),
-          filter((event) => {
-            if (this.currentPlayerSide === null) return false;
-            return this.currentPlayerSide === SideEnum.BOTTOM || this.currentPlayerSide === SideEnum.TOP
-              ? event.key === KeyboardEventEnum.LEFT || event.key === KeyboardEventEnum.RIGHT
-              : event.key === KeyboardEventEnum.UP || event.key === KeyboardEventEnum.DOWN;
-          }),
-          distinctUntilKeyChanged('type'),
-          switchMap((event) => {
-            if (event.type === 'keydown') {
-              const direction = directionMapper[event.key as KeyboardEventEnum];
-              return timer(0, 50).pipe(map(() => direction));
-            } else {
-              return EMPTY;
-            }
-          }),
-          filter(Boolean)
-        )
-        .subscribe((direction) => {
-          this.gameService.sendPlayerUpdate(direction, this.currentPlayerSide as SideEnum);
-        })
-    );
+    this.keySub?.unsubscribe();
+    this.keySub = merge(
+      fromEvent<KeyboardEvent>(this.document, 'keydown'),
+      fromEvent<KeyboardEvent>(this.document, 'keyup')
+    )
+      .pipe(
+        tap((event) => event.preventDefault()),
+        filter((event) => {
+          if (this.currentPlayerSide === null) return false;
+          return this.currentPlayerSide === SideEnum.BOTTOM || this.currentPlayerSide === SideEnum.TOP
+            ? event.key === KeyboardEventEnum.LEFT || event.key === KeyboardEventEnum.RIGHT
+            : event.key === KeyboardEventEnum.UP || event.key === KeyboardEventEnum.DOWN;
+        }),
+        distinctUntilKeyChanged('type'),
+        switchMap((event) => {
+          if (event.type === 'keydown') {
+            const direction = directionMapper[event.key as KeyboardEventEnum];
+            return timer(0, 50).pipe(map(() => direction));
+          } else {
+            return EMPTY;
+          }
+        }),
+        filter(Boolean)
+      )
+      .subscribe((direction) => {
+        this.gameService.sendPlayerUpdate(direction, this.currentPlayerSide as SideEnum);
+      });
   }
 }
