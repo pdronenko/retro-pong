@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { GameStateInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
 import { Socket } from 'ngx-socket-io';
 import { ReplaySubject } from 'rxjs';
+import { ApiService } from '../../core/services/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class GameBoardService {
 
   gameState$ = new ReplaySubject<GameStateInterface>(1);
 
-  constructor(private socket: Socket, private httpClient: HttpClient) {}
+  constructor(private socket: Socket, private httpClient: HttpClient, private apiService: ApiService) {}
 
   startGame(): void {
     // todo body?

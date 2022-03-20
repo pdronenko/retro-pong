@@ -4,6 +4,7 @@
   </div>
   <div *ngIf="gameState$ | async as gameState" class="game-box">
     <!--  todo players as components-->
+    <pong-player-paddle></pong-player-paddle>
     <div
       *ngIf="playerBottom$ | async as player"
       [style.width]="player.width + 'px'"
