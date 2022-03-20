@@ -1,4 +1,7 @@
 <h1 class="heading">Retro Pong</h1>
+<a class="github-link" href="https://github.com/pdronenko/retro-pong" target='_blank'>
+  <i class="nes-icon github"></i>
+</a>
 <nav class="player-status-wrapper">
   <pong-player-bar *ngIf="playerLeft$ | async as player" [disabled]="playing" class="left" [player]="player"
                    (startGame)="startGame($event)"></pong-player-bar>

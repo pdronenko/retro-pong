@@ -10,7 +10,7 @@ Frontend part - Angular 13. Backend - NestJS 8.
 
 Frontend just for a view, all logic is on the backend side.
 
-## Live preview
+## Try it
 Open on [Heroku](https://retro-pong.herokuapp.com/)
 
 ![plot](./apps/retro-pong/src/assets/images/gameplay.png)
