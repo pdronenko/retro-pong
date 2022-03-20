@@ -14,6 +14,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   playerTop$: Observable<PlayerInterface>;
   playerLeft$: Observable<PlayerInterface>;
   playing = false;
+  playingSide: SideEnum | null;
 
   private subs = new Subscription();
 
@@ -22,6 +23,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subs.add(
       this.gameService.currentPlayerSide$.subscribe((side) => {
+        this.playingSide = side;
         this.playing = side !== null;
       })
     );

@@ -21,10 +21,10 @@ export class GameService {
   private gameState = new GameModel();
 
   private players: Record<SideEnum, PlayerModel> = {
-    [SideEnum.BOTTOM]: new PlayerModel('Player 1', 'x', SideEnum.BOTTOM),
-    [SideEnum.RIGHT]: new PlayerModel('Player 2', 'y', SideEnum.RIGHT),
+    [SideEnum.LEFT]: new PlayerModel('Player 1', 'y', SideEnum.LEFT),
+    [SideEnum.BOTTOM]: new PlayerModel('Player 2', 'x', SideEnum.BOTTOM),
     [SideEnum.TOP]: new PlayerModel('Player 3', 'x', SideEnum.TOP),
-    [SideEnum.LEFT]: new PlayerModel('Player 4', 'y', SideEnum.LEFT),
+    [SideEnum.RIGHT]: new PlayerModel('Player 4', 'y', SideEnum.RIGHT),
   };
 
   @SubscribeMessage(SocketEventEnum.PLAYER_UPDATE)

@@ -2,5 +2,5 @@
 <button [disabled]="disabled" type="button" class="nes-btn" (click)="startGame.emit(player.side)"
         [class.is-disabled]="disabled" *ngIf="!player.active; else playerName">JOIN</button>
 <ng-template #playerName>
-  <p class="player-name">{{ player.name }}</p>
+  <p [class.active]="isActive" class="player-name">{{ player.name }}</p>
 </ng-template>

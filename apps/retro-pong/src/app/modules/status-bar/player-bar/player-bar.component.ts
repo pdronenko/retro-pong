@@ -8,6 +8,7 @@ import { PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 })
 export class PlayerBarComponent {
   @Input() player: PlayerInterface;
-  @Input() disabled: boolean;
+  @Input() disabled: boolean; // todo remove double?
+  @Input() isActive: boolean;
   @Output() startGame = new EventEmitter<SideEnum>();
 }
