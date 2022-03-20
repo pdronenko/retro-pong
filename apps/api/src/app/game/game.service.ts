@@ -11,7 +11,7 @@ import {
 import { Server } from 'socket.io';
 import { GeometryService } from './geometry.service';
 
-@WebSocketGateway(+process.env.WS_PORT || 3000)
+@WebSocketGateway()
 export class GameService {
   @WebSocketServer()
   private server: Server;
