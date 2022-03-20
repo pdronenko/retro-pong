@@ -89,7 +89,6 @@ export class Geometry {
   private static bouncedAngle(angle: number): number {
     const bouncedAngle = 180 - angle;
     const randomNum = Geometry.randomIntFromInterval(1, 20);
-    console.log(bouncedAngle < 30 ? bouncedAngle + randomNum : bouncedAngle - randomNum);
     return bouncedAngle < 30 ? bouncedAngle + randomNum : bouncedAngle - randomNum;
     // todo normal angle calculation
   }
