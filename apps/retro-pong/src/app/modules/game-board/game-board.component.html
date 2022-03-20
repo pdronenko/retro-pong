@@ -3,7 +3,8 @@
   <pong-player-paddle class="right" *ngIf="playerRight$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
   <pong-player-paddle class="top" *ngIf="playerTop$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
   <pong-player-paddle class="left" *ngIf="playerLeft$ | async as paddle" [paddle]="paddle"></pong-player-paddle>
-  <pong-ball [class.transparent]="gameState.status === 'idle'" [ballSpeed]="gameState.ballSpeed"
-             [position]="gameState.ballPosition">
+  <pong-ball [class.transparent]="gameState.status !== 'playing'" [ballSpeed]="gameState.ballSpeed"
+             [direction]="gameState.ballDirection">
   </pong-ball>
+  <p class="counter" *ngIf="gameState.status === 'counting'">{{gameState.count}}</p>
 </ng-container>

@@ -9,8 +9,8 @@ $player-color-4: #BAA044;
 $paddle-radius: 0px;
 
 $ball-diameter: 20px;
-$ball-color: white;
-$ball-indent: $ball-diameter / 2;
+$ball-color: #FFF5F2;
+$ball-indent: 10px;
 
 $radius: 0px;
 
@@ -19,5 +19,7 @@ $game-box-size: 600px;
 $game-box-background-color: #1B0326;
 
 $game-surround-background: #09454F;
+$status-bar-background-color: #FFF5F2;
+$counter-color: #9EA4E2;
 
-$status-bar-background-color: white;
+$dark: #0F0007;

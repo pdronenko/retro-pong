@@ -1,4 +1,4 @@
-import { BallPositionInterface, GameInterface, SideEnum } from '@retro-pong/api-interfaces';
+import { BallDirectionInterface, GameInterface, SideEnum } from '@retro-pong/api-interfaces';
 
 export class Geometry {
   static readonly fieldSize = 600;
@@ -26,8 +26,8 @@ export class Geometry {
     return 180 - angle;
   }
 
-  static calcBallNewDirection(gameState: GameInterface): BallPositionInterface {
-    const { x: x1, y: y1, degree: ballDirectionDegree, side: currentSide } = gameState.ballPosition;
+  static calcBallNewDirection(gameState: GameInterface): BallDirectionInterface {
+    const { x: x1, y: y1, angle: ballDirectionDegree, side: currentSide } = gameState.ballDirection;
     const newAngle = Geometry.bouncedAngle(ballDirectionDegree);
     let tan = Math.tan((newAngle * Math.PI) / 180);
 
@@ -81,6 +81,6 @@ export class Geometry {
 
     const newDistance = Math.hypot(x2 - x1, y2 - y1); // todo slow?
 
-    return { x: x2, y: y2, degree: newAngle + 90, distance: newDistance, side: nextSide };
+    return { x: x2, y: y2, angle: newAngle + 90, distance: newDistance, side: nextSide };
   }
 }

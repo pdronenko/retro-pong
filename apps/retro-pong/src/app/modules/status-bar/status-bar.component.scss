@@ -4,7 +4,7 @@
   width: $game-box-size + $game-box-indent * 2;
   height: 150px;
   background-color: $status-bar-background-color;
-  border: 10px solid black;
+  border: 10px solid $dark;
   box-sizing: border-box;
   margin: 50px 0 20px;
   display: flex;

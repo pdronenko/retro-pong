@@ -10,7 +10,6 @@ import { GameService } from '../../core/services/game.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatusBarComponent implements OnInit, OnDestroy {
-  currentPlayerSide$: Observable<SideEnum>;
   playerBottom$: Observable<PlayerInterface>;
   playerRight$: Observable<PlayerInterface>;
   playerTop$: Observable<PlayerInterface>;
@@ -22,7 +21,11 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
-    this.currentPlayerSide$ = this.gameService.currentPlayerSide$;
+    this.subs.add(
+      this.gameService.currentPlayerSide$.subscribe((side) => {
+        this.playing = side !== null;
+      })
+    );
     this.playerBottom$ = this.gameService.playerBottom$;
     this.playerRight$ = this.gameService.playerRight$;
     this.playerTop$ = this.gameService.playerTop$;
@@ -34,12 +37,6 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   }
 
   startGame(side: SideEnum): void {
-    this.subs.add(
-      this.gameService.startGame(side).subscribe(({ side }) => {
-        if (side in SideEnum) {
-          this.playing = true;
-        }
-      })
-    );
+    this.subs.add(this.gameService.startGame(side).subscribe());
   }
 }

@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
 import { Socket } from 'ngx-socket-io';
-import { Observable, ReplaySubject, tap } from 'rxjs';
+import { map, merge, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  currentPlayerSide$ = new ReplaySubject<SideEnum>(1);
+  currentPlayerSide$ = new ReplaySubject<SideEnum | null>(1);
 
   playerBottom$ = new ReplaySubject<PlayerInterface>(1);
   playerRight$ = new ReplaySubject<PlayerInterface>(1);
@@ -41,35 +41,41 @@ export class GameService {
     );
   }
 
-  connect(): void {
-    this.socket.on(SocketEventEnum.GAME_UPDATE, (payload: GameInterface) => {
-      this.gameState$.next(payload);
-    });
-
-    this.socket.on(SocketEventEnum.PLAYER_UPDATE, (playerUpdate: PlayerInterface) => {
-      switch (playerUpdate.side) {
-        case SideEnum.BOTTOM:
-          this.playerBottom$.next(playerUpdate);
-          break;
-        case SideEnum.RIGHT:
-          this.playerRight$.next(playerUpdate);
-          break;
-        case SideEnum.TOP:
-          this.playerTop$.next(playerUpdate);
-          break;
-        case SideEnum.LEFT:
-          this.playerLeft$.next(playerUpdate);
-          break;
-      }
-    });
-  }
-
-  disconnect(): void {
-    this.socket.removeAllListeners(SocketEventEnum.PLAYER_UPDATE);
-    this.socket.removeAllListeners(SocketEventEnum.GAME_UPDATE);
+  connect(): Observable<null> {
+    return merge(
+      this.listenTo<GameInterface>(SocketEventEnum.GAME_UPDATE).pipe(tap((game) => this.gameState$.next(game))),
+      this.listenTo<PlayerInterface>(SocketEventEnum.PLAYER_UPDATE).pipe(
+        withLatestFrom(this.currentPlayerSide$),
+        tap(([update, currentPlayerSide]) => this.updatePlayersState(update, currentPlayerSide))
+      )
+    ).pipe(map(() => null));
   }
 
   sendPlayerUpdate(dir: string, side: SideEnum): void {
     this.socket.emit(SocketEventEnum.PLAYER_UPDATE, { dir, side });
+  }
+
+  private listenTo<T>(event: SocketEventEnum): Observable<T> {
+    return this.socket.fromEvent<T>(event);
+  }
+
+  private updatePlayersState(playerUpdate: PlayerInterface, currentPlayerSide: SideEnum | null): void {
+    if (playerUpdate.side === currentPlayerSide && !playerUpdate.active) {
+      this.currentPlayerSide$.next(null);
+    }
+    switch (playerUpdate.side) {
+      case SideEnum.BOTTOM:
+        this.playerBottom$.next(playerUpdate);
+        break;
+      case SideEnum.RIGHT:
+        this.playerRight$.next(playerUpdate);
+        break;
+      case SideEnum.TOP:
+        this.playerTop$.next(playerUpdate);
+        break;
+      case SideEnum.LEFT:
+        this.playerLeft$.next(playerUpdate);
+        break;
+    }
   }
 }

@@ -31,7 +31,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
   playerTop$: Observable<PlayerInterface>;
   playerLeft$: Observable<PlayerInterface>;
 
-  private currentPlayerSide: SideEnum;
+  private currentPlayerSide: SideEnum | null;
 
   private subs = new Subscription();
 
@@ -44,12 +44,12 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.playerTop$ = this.gameService.playerTop$;
     this.playerLeft$ = this.gameService.playerLeft$;
 
-    this.gameService.connect();
+    this.subs.add(this.gameService.connect().subscribe());
     this.subs.add(this.gameService.getGameState().subscribe());
     this.subs.add(this.gameService.getPlayerState().subscribe());
     this.subs.add(
       this.gameService.currentPlayerSide$
-        .pipe(filter((currentPlayerSide) => currentPlayerSide in SideEnum))
+        .pipe(filter((currentPlayerSide) => currentPlayerSide !== null && currentPlayerSide in SideEnum))
         .subscribe((side) => {
           this.currentPlayerSide = side;
           this.zone.runOutsideAngular(() => {
@@ -69,7 +69,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         .pipe(
           tap((event) => event.preventDefault()),
           filter((event) => {
-            if (!(this.currentPlayerSide in SideEnum)) return false;
+            if (this.currentPlayerSide === null) return false;
             return this.currentPlayerSide === SideEnum.BOTTOM || this.currentPlayerSide === SideEnum.TOP
               ? event.key === KeyboardEventEnum.LEFT || event.key === KeyboardEventEnum.RIGHT
               : event.key === KeyboardEventEnum.UP || event.key === KeyboardEventEnum.DOWN;
@@ -86,7 +86,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           filter(Boolean)
         )
         .subscribe((direction) => {
-          this.gameService.sendPlayerUpdate(direction, this.currentPlayerSide);
+          this.gameService.sendPlayerUpdate(direction, this.currentPlayerSide as SideEnum);
         })
     );
   }

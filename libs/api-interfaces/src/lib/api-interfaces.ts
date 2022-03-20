@@ -1,7 +1,8 @@
 export interface GameInterface {
-  ballPosition: BallPositionInterface;
+  ballDirection: BallDirectionInterface;
   ballSpeed: number;
   status: GameStatusEnum;
+  count?: number;
 }
 
 export interface PlayerInterface {
@@ -18,13 +19,12 @@ export interface PlayerPayloadInterface {
   side: SideEnum;
 }
 
-export interface BallPositionInterface {
-  // todo naming
+export interface BallDirectionInterface {
   x: number;
   y: number;
   distance: number;
   side: SideEnum;
-  degree: number; // todo angle, not degree?
+  angle: number;
 }
 
 export enum SideEnum {
@@ -49,6 +49,7 @@ export enum ArrowDirectionEnum {
 export enum GameStatusEnum {
   IDLE = 'idle',
   PLAYING = 'playing',
+  COUNTING = 'counting',
 }
 
 export enum ApiRoutesEnum {
