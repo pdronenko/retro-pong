@@ -17,8 +17,10 @@ export class PlayerPaddleComponent {
   @HostBinding('style.width') width = '0px';
   @HostBinding('style.height') height = '0px';
   @HostBinding('style.transform') transform = 'none';
+  @HostBinding('style.transition-duration') transitionDuration = '0ms';
 
   private setPaddleStyles(paddle: PlayerInterface): void {
+    this.transitionDuration = paddle.active ? '100ms' : '0ms';
     switch (paddle.side) {
       case SideEnum.TOP:
       case SideEnum.BOTTOM:

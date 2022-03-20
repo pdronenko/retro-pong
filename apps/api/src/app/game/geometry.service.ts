@@ -2,6 +2,10 @@ import { BallPositionInterface, GameStateInterface, SideEnum } from '@retro-pong
 
 export class GeometryService {
   static readonly fieldSize = 600;
+  static readonly centerPosition = 300;
+  static readonly paddleShift = 20;
+  static readonly ballSpeed = 0.5;
+  static readonly activePaddleWidth = 150;
 
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;

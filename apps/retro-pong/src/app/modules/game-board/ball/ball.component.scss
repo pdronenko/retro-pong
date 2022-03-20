@@ -9,8 +9,13 @@
   left: $ball-indent;
   bottom: $ball-indent;
   transform-origin: center center;
-  will-change: transform;
+  will-change: transform, opacity;
   transition-property: transform;
   transition-timing-function: linear;
   border-radius: 50%;
+  opacity: 1;
+
+  &.transparent {
+    opacity: 0;
+  }
 }

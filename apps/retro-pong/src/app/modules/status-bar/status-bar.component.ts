@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { GameService } from '../../core/services/game.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   playerRight$: Observable<PlayerInterface>;
   playerTop$: Observable<PlayerInterface>;
   playerLeft$: Observable<PlayerInterface>;
+  playing = false;
 
   private subs = new Subscription();
 
@@ -33,6 +34,12 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   }
 
   startGame(side: SideEnum): void {
-    this.subs.add(this.gameService.startGame(side).subscribe());
+    this.subs.add(
+      this.gameService.startGame(side).subscribe(({ side }) => {
+        if (side in SideEnum) {
+          this.playing = true;
+        }
+      })
+    );
   }
 }

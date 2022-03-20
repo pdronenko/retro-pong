@@ -16,52 +16,55 @@ export class GameService {
   @WebSocketServer()
   private server: Server;
 
-  private readonly paddleShift = 20;
-  private readonly ballSpeed = 0.5;
-  private readonly activePaddleWidth = 150;
-
   private readonly paddleShiftMapper = {
-    [ArrowDirectionEnum.LEFT]: -this.paddleShift,
-    [ArrowDirectionEnum.RIGHT]: this.paddleShift,
-    [ArrowDirectionEnum.UP]: this.paddleShift,
-    [ArrowDirectionEnum.DOWN]: -this.paddleShift,
+    [ArrowDirectionEnum.LEFT]: -GeometryService.paddleShift,
+    [ArrowDirectionEnum.RIGHT]: GeometryService.paddleShift,
+    [ArrowDirectionEnum.UP]: GeometryService.paddleShift,
+    [ArrowDirectionEnum.DOWN]: -GeometryService.paddleShift,
   };
 
   private gameState: GameStateInterface = {
-    ballPosition: { x: 300, y: 300, distance: 0, degree: 160, side: SideEnum.BOTTOM },
-    ballSpeed: this.ballSpeed,
+    ballPosition: {
+      x: GeometryService.centerPosition,
+      y: GeometryService.centerPosition,
+      distance: 0,
+      degree: 160,
+      side: SideEnum.BOTTOM,
+    },
+    ballSpeed: GeometryService.ballSpeed,
     status: GameStatusEnum.IDLE,
   };
 
   private players: Record<SideEnum, PlayerInterface> = {
     [SideEnum.BOTTOM]: {
+      // todo to model?
       side: SideEnum.BOTTOM,
-      width: 600,
-      position: 300,
+      width: GeometryService.fieldSize,
+      position: GeometryService.centerPosition,
       name: 'Player 1',
       axis: 'x',
       active: false,
     },
     [SideEnum.RIGHT]: {
       side: SideEnum.RIGHT,
-      width: 600,
-      position: 300,
+      width: GeometryService.fieldSize,
+      position: GeometryService.centerPosition,
       name: 'Player 2',
       axis: 'y',
       active: false,
     },
     [SideEnum.TOP]: {
       side: SideEnum.TOP,
-      width: 600,
-      position: 300,
+      width: GeometryService.fieldSize,
+      position: GeometryService.centerPosition,
       name: 'Player 3',
       axis: 'x',
       active: false,
     },
     [SideEnum.LEFT]: {
       side: SideEnum.LEFT,
-      width: 600,
-      position: 300,
+      width: GeometryService.fieldSize,
+      position: GeometryService.centerPosition,
       name: 'Player 4',
       axis: 'y',
       active: false,
@@ -86,7 +89,7 @@ export class GameService {
 
   public startGame(side: SideEnum): void {
     this.players[side].active = true;
-    this.players[side].width = this.activePaddleWidth;
+    this.players[side].width = GeometryService.activePaddleWidth;
     this.server.emit(SocketEventEnum.PLAYER_UPDATE, this.players[side]);
 
     if (this.gameState.status === GameStatusEnum.IDLE) {
@@ -109,9 +112,17 @@ export class GameService {
 
   private resetGameState(): void {
     this.gameState.status = GameStatusEnum.IDLE;
-    this.gameState.ballPosition.x = 300;
-    this.gameState.ballPosition.y = 300;
+    this.gameState.ballPosition.x = GeometryService.centerPosition;
+    this.gameState.ballPosition.y = GeometryService.centerPosition;
     this.gameState.ballPosition.distance = 0;
+    this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
+  }
+
+  private resetPlayer(side: SideEnum): void {
+    this.players[side].active = false;
+    this.players[side].width = GeometryService.fieldSize;
+    this.players[side].position = GeometryService.centerPosition;
+    this.server.emit(SocketEventEnum.PLAYER_UPDATE, this.players[side]);
   }
 
   private setNewBallCoordinates(gameState: GameStateInterface): void {
@@ -122,7 +133,7 @@ export class GameService {
       const player = this.players[gameState.ballPosition.side];
       if (GeometryService.isPlayerMissedTheBall(player.width, player.position, gameState.ballPosition[player.axis])) {
         this.resetGameState();
-        this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
+        this.resetPlayer(player.side);
         return;
       }
       this.setNewBallCoordinates(this.gameState);
