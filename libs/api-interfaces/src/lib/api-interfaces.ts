@@ -1,4 +1,4 @@
-export interface GameStateInterface {
+export interface GameInterface {
   ballPosition: BallPositionInterface;
   ballSpeed: number;
   status: GameStatusEnum;

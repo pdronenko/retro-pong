@@ -1,7 +1,7 @@
 import { MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import {
   ArrowDirectionEnum,
-  GameStateInterface,
+  GameInterface,
   GameStatusEnum,
   PlayerInterface,
   PlayerPayloadInterface,
@@ -9,7 +9,9 @@ import {
   SocketEventEnum,
 } from '@retro-pong/api-interfaces';
 import { Server } from 'socket.io';
-import { GeometryService } from './geometry.service';
+import { Geometry } from './geometry';
+import { GameModel } from './shared/models/game.model';
+import { PlayerModel } from './shared/models/player.model';
 
 @WebSocketGateway()
 export class GameService {
@@ -17,58 +19,19 @@ export class GameService {
   private server: Server;
 
   private readonly paddleShiftMapper = {
-    [ArrowDirectionEnum.LEFT]: -GeometryService.paddleShift,
-    [ArrowDirectionEnum.RIGHT]: GeometryService.paddleShift,
-    [ArrowDirectionEnum.UP]: GeometryService.paddleShift,
-    [ArrowDirectionEnum.DOWN]: -GeometryService.paddleShift,
+    [ArrowDirectionEnum.LEFT]: -Geometry.paddleShift,
+    [ArrowDirectionEnum.RIGHT]: Geometry.paddleShift,
+    [ArrowDirectionEnum.UP]: Geometry.paddleShift,
+    [ArrowDirectionEnum.DOWN]: -Geometry.paddleShift,
   };
 
-  private gameState: GameStateInterface = {
-    ballPosition: {
-      x: GeometryService.centerPosition,
-      y: GeometryService.centerPosition,
-      distance: 0,
-      degree: 160,
-      side: SideEnum.BOTTOM,
-    },
-    ballSpeed: GeometryService.ballSpeed,
-    status: GameStatusEnum.IDLE,
-  };
+  private gameState = new GameModel();
 
-  private players: Record<SideEnum, PlayerInterface> = {
-    [SideEnum.BOTTOM]: {
-      // todo to model?
-      side: SideEnum.BOTTOM,
-      width: GeometryService.fieldSize,
-      position: GeometryService.centerPosition,
-      name: 'Player 1',
-      axis: 'x',
-      active: false,
-    },
-    [SideEnum.RIGHT]: {
-      side: SideEnum.RIGHT,
-      width: GeometryService.fieldSize,
-      position: GeometryService.centerPosition,
-      name: 'Player 2',
-      axis: 'y',
-      active: false,
-    },
-    [SideEnum.TOP]: {
-      side: SideEnum.TOP,
-      width: GeometryService.fieldSize,
-      position: GeometryService.centerPosition,
-      name: 'Player 3',
-      axis: 'x',
-      active: false,
-    },
-    [SideEnum.LEFT]: {
-      side: SideEnum.LEFT,
-      width: GeometryService.fieldSize,
-      position: GeometryService.centerPosition,
-      name: 'Player 4',
-      axis: 'y',
-      active: false,
-    },
+  private players: Record<SideEnum, PlayerModel> = {
+    [SideEnum.BOTTOM]: new PlayerModel('Player 1', 'x', SideEnum.BOTTOM),
+    [SideEnum.RIGHT]: new PlayerModel('Player 2', 'y', SideEnum.RIGHT),
+    [SideEnum.TOP]: new PlayerModel('Player 3', 'x', SideEnum.TOP),
+    [SideEnum.LEFT]: new PlayerModel('Player 4', 'y', SideEnum.LEFT),
   };
 
   @SubscribeMessage(SocketEventEnum.PLAYER_UPDATE)
@@ -79,7 +42,7 @@ export class GameService {
     }
   }
 
-  getGameState(): GameStateInterface {
+  getGameState(): GameInterface {
     return this.gameState;
   }
 
@@ -89,7 +52,7 @@ export class GameService {
 
   public startGame(side: SideEnum): void {
     this.players[side].active = true;
-    this.players[side].width = GeometryService.activePaddleWidth;
+    this.players[side].width = Geometry.activePaddleWidth;
     this.server.emit(SocketEventEnum.PLAYER_UPDATE, this.players[side]);
 
     if (this.gameState.status === GameStatusEnum.IDLE) {
@@ -103,7 +66,7 @@ export class GameService {
     const newPosition = position + this.paddleShiftMapper[payload.dir];
     const leftPlayerBorder = newPosition - width / 2;
     const rightPlayerBorder = newPosition + width / 2;
-    if (leftPlayerBorder < 0 || rightPlayerBorder > GeometryService.fieldSize) {
+    if (leftPlayerBorder < 0 || rightPlayerBorder > Geometry.fieldSize) {
       return null;
     }
     this.players[payload.side].position += this.paddleShiftMapper[payload.dir];
@@ -111,27 +74,22 @@ export class GameService {
   }
 
   private resetGameState(): void {
-    this.gameState.status = GameStatusEnum.IDLE;
-    this.gameState.ballPosition.x = GeometryService.centerPosition;
-    this.gameState.ballPosition.y = GeometryService.centerPosition;
-    this.gameState.ballPosition.distance = 0;
+    this.gameState.reset();
     this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
   }
 
   private resetPlayer(side: SideEnum): void {
-    this.players[side].active = false;
-    this.players[side].width = GeometryService.fieldSize;
-    this.players[side].position = GeometryService.centerPosition;
+    this.players[side].reset();
     this.server.emit(SocketEventEnum.PLAYER_UPDATE, this.players[side]);
   }
 
-  private setNewBallCoordinates(gameState: GameStateInterface): void {
-    const newPosition = GeometryService.calcBallNewDirection(gameState);
+  private setNewBallCoordinates(gameState: GameInterface): void {
+    const newPosition = Geometry.calcBallNewDirection(gameState);
     this.gameState.ballPosition = newPosition;
     this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
     setTimeout(() => {
       const player = this.players[gameState.ballPosition.side];
-      if (GeometryService.isPlayerMissedTheBall(player.width, player.position, gameState.ballPosition[player.axis])) {
+      if (Geometry.isPlayerMissedTheBall(player.width, player.position, gameState.ballPosition[player.axis])) {
         this.resetGameState();
         this.resetPlayer(player.side);
         return;

@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { GameStateInterface, PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
+import { GameInterface, PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 import {
   distinctUntilKeyChanged,
   EMPTY,
@@ -24,7 +24,7 @@ import { GameService } from '../../core/services/game.service';
   styleUrls: ['./game-board.component.scss'],
 })
 export class GameBoardComponent implements OnInit, OnDestroy {
-  gameState$: Observable<GameStateInterface>;
+  gameState$: Observable<GameInterface>;
 
   playerBottom$: Observable<PlayerInterface>;
   playerRight$: Observable<PlayerInterface>;

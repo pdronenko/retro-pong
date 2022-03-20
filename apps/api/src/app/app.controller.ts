@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiRoutesEnum, GameStateInterface, PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
+import { ApiRoutesEnum, GameInterface, PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 
 import { GameService } from './game/game.service';
 
@@ -8,7 +8,7 @@ export class AppController {
   constructor(private readonly gameService: GameService) {}
 
   @Get(ApiRoutesEnum.GAME)
-  getGame(): GameStateInterface {
+  getGame(): GameInterface {
     return this.gameService.getGameState();
   }
 

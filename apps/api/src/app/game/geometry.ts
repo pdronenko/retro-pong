@@ -1,6 +1,6 @@
-import { BallPositionInterface, GameStateInterface, SideEnum } from '@retro-pong/api-interfaces';
+import { BallPositionInterface, GameInterface, SideEnum } from '@retro-pong/api-interfaces';
 
-export class GeometryService {
+export class Geometry {
   static readonly fieldSize = 600;
   static readonly centerPosition = 300;
   static readonly paddleShift = 20;
@@ -26,56 +26,55 @@ export class GeometryService {
     return 180 - angle;
   }
 
-  static calcBallNewDirection(gameState: GameStateInterface): BallPositionInterface {
+  static calcBallNewDirection(gameState: GameInterface): BallPositionInterface {
     const { x: x1, y: y1, degree: ballDirectionDegree, side: currentSide } = gameState.ballPosition;
-    const newAngle = GeometryService.bouncedAngle(ballDirectionDegree);
+    const newAngle = Geometry.bouncedAngle(ballDirectionDegree);
     let tan = Math.tan((newAngle * Math.PI) / 180);
 
-    let nextSide: SideEnum = GeometryService.addSide(currentSide);
+    let nextSide: SideEnum = Geometry.addSide(currentSide);
     let triangleSideLength: number;
     let x2: number, y2: number;
     switch (currentSide) {
       case SideEnum.BOTTOM:
-        triangleSideLength = (GeometryService.fieldSize - x1) * tan;
-        x2 = GeometryService.fieldSize;
+        triangleSideLength = (Geometry.fieldSize - x1) * tan;
+        x2 = Geometry.fieldSize;
         y2 = triangleSideLength;
-        if (y2 > GeometryService.fieldSize) {
-          x2 = GeometryService.calculateSide2Length(Math.abs(y2), 90 - newAngle);
-          y2 = GeometryService.fieldSize;
-          nextSide = GeometryService.addSide(nextSide);
+        if (y2 > Geometry.fieldSize) {
+          x2 = Geometry.calculateSide2Length(Math.abs(y2), 90 - newAngle);
+          y2 = Geometry.fieldSize;
+          nextSide = Geometry.addSide(nextSide);
         }
         break;
       case SideEnum.RIGHT:
-        triangleSideLength = (GeometryService.fieldSize - y1) * tan;
-        x2 = GeometryService.fieldSize - triangleSideLength;
-        y2 = GeometryService.fieldSize;
+        triangleSideLength = (Geometry.fieldSize - y1) * tan;
+        x2 = Geometry.fieldSize - triangleSideLength;
+        y2 = Geometry.fieldSize;
         if (x2 < 0) {
-          y2 = GeometryService.fieldSize - GeometryService.calculateSide2Length(Math.abs(x2), 90 - newAngle);
+          y2 = Geometry.fieldSize - Geometry.calculateSide2Length(Math.abs(x2), 90 - newAngle);
           x2 = 0;
-          nextSide = GeometryService.addSide(nextSide);
+          nextSide = Geometry.addSide(nextSide);
         }
         break;
       case SideEnum.TOP:
         triangleSideLength = x1 * tan;
         x2 = 0;
-        y2 = GeometryService.fieldSize - triangleSideLength;
+        y2 = Geometry.fieldSize - triangleSideLength;
         if (y2 < 0) {
-          x2 = GeometryService.calculateSide2Length(Math.abs(y2), 90 - newAngle);
+          x2 = Geometry.calculateSide2Length(Math.abs(y2), 90 - newAngle);
           y2 = 0;
-          nextSide = GeometryService.addSide(nextSide);
+          nextSide = Geometry.addSide(nextSide);
         }
         break;
       case SideEnum.LEFT:
         tan = Math.tan(((newAngle < 90 ? 90 - newAngle : newAngle) * Math.PI) / 180);
-        triangleSideLength = (GeometryService.fieldSize - y1) * tan;
+        triangleSideLength = (Geometry.fieldSize - y1) * tan;
         x2 = triangleSideLength;
         y2 = 0;
-        if (x2 > GeometryService.fieldSize) {
+        if (x2 > Geometry.fieldSize) {
           y2 =
-            GeometryService.fieldSize -
-            GeometryService.calculateSide2Length(Math.abs(x2 - GeometryService.fieldSize), 90 - (90 - newAngle));
-          x2 = GeometryService.fieldSize;
-          nextSide = GeometryService.addSide(nextSide);
+            Geometry.fieldSize - Geometry.calculateSide2Length(Math.abs(x2 - Geometry.fieldSize), 90 - (90 - newAngle));
+          x2 = Geometry.fieldSize;
+          nextSide = Geometry.addSide(nextSide);
         }
         break;
     }

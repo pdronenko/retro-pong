@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GameStateInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
+import { GameInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
 import { Socket } from 'ngx-socket-io';
 import { Observable, ReplaySubject, tap } from 'rxjs';
 import { ApiService } from './api.service';
@@ -16,7 +16,7 @@ export class GameService {
   playerTop$ = new ReplaySubject<PlayerInterface>(1);
   playerLeft$ = new ReplaySubject<PlayerInterface>(1);
 
-  gameState$ = new ReplaySubject<GameStateInterface>(1);
+  gameState$ = new ReplaySubject<GameInterface>(1);
 
   constructor(private socket: Socket, private httpClient: HttpClient, private apiService: ApiService) {}
 
@@ -26,7 +26,7 @@ export class GameService {
       .pipe(tap((response) => this.currentPlayerSide$.next(response?.side)));
   }
 
-  getGameState(): Observable<GameStateInterface> {
+  getGameState(): Observable<GameInterface> {
     return this.apiService.getGameState().pipe(tap((state) => this.gameState$.next(state)));
   }
 
@@ -42,7 +42,7 @@ export class GameService {
   }
 
   connect(): void {
-    this.socket.on(SocketEventEnum.GAME_UPDATE, (payload: GameStateInterface) => {
+    this.socket.on(SocketEventEnum.GAME_UPDATE, (payload: GameInterface) => {
       this.gameState$.next(payload);
     });
 

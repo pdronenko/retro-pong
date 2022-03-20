@@ -2,10 +2,10 @@ $player-indent: 10px;
 $player-idle-width: 560px;
 $player-height: 10px;
 $player-animation-duration: 100ms;
-$player-color-1: grey;
-$player-color-2: green;
-$player-color-3: red;
-$player-color-4: yellow;
+$player-color-1: #9EA4E2;
+$player-color-2: #447A1C;
+$player-color-3: #A53535;
+$player-color-4: #BAA044;
 $paddle-radius: 0px;
 
 $ball-diameter: 20px;
@@ -16,8 +16,8 @@ $radius: 0px;
 
 $game-box-indent: $ball-diameter;
 $game-box-size: 600px;
-$game-box-background-color: #220c32;
+$game-box-background-color: #1B0326;
 
-$game-surround-background: #21006f;
+$game-surround-background: #09454F;
 
 $status-bar-background-color: white;
