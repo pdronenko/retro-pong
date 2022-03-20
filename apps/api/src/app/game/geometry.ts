@@ -11,7 +11,9 @@ export class Geometry {
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;
     const rightPlayerBorder = playerPosition + playerWidth / 2;
-    return ballPosition < leftPlayerBorder || ballPosition > rightPlayerBorder;
+    return (
+      ballPosition < leftPlayerBorder - Geometry.paddleShift || ballPosition > rightPlayerBorder + Geometry.paddleShift
+    );
   }
 
   static calcBallNewDirection(gameState: GameInterface): BallDirectionInterface {
@@ -85,7 +87,10 @@ export class Geometry {
   }
 
   private static bouncedAngle(angle: number): number {
+    const bouncedAngle = 180 - angle;
+    const randomNum = Geometry.randomIntFromInterval(1, 30);
+    console.log(bouncedAngle < 30 ? bouncedAngle + randomNum : bouncedAngle - randomNum);
+    return bouncedAngle < 30 ? bouncedAngle + randomNum : bouncedAngle - randomNum;
     // todo normal angle calculation
-    return 180 - angle;
   }
 }
