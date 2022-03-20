@@ -6,5 +6,7 @@
   <pong-ball [class.transparent]="gameState.status !== 'playing'" [ballSpeed]="gameState.ballSpeed"
              [direction]="gameState.ballDirection">
   </pong-ball>
-  <p class="counter" *ngIf="gameState.status === 'counting'">{{gameState.count}}</p>
+  <p class="announcement" *ngIf="gameState.status !== 'playing'">
+    {{gameState.status === 'idle' ? 'PRESS JOIN' : gameState.count}}
+  </p>
 </ng-container>

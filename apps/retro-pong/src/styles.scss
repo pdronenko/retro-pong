@@ -4,4 +4,6 @@
 body {
   background-color: $game-surround-background;
   font: 16px 'Press Start 2P', cursive;
+  background-image: radial-gradient(#020e10 0.85px, $game-surround-background 0.85px);
+  background-size: 17px 17px;
 }

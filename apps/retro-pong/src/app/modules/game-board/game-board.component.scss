@@ -7,16 +7,17 @@
   position: relative;
   border-radius: $radius;
 
-  .counter {
+  .announcement {
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     margin: auto;
-    width: 56px;
     height: 56px;
-    font-size: 64px;
+    font-size: 32px;
     color: $counter-color;
+    text-align: center;
+    line-height: 60px;
   }
 }
