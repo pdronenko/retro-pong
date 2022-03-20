@@ -13,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    SocketIoModule.forRoot({ url: `${location.protocol}//${location.hostname}:${environment.socketPort}` }),
+    SocketIoModule.forRoot({ url: location.origin }),
     BrowserModule,
     HttpClientModule,
     RouterModule,
