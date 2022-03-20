@@ -1,1 +1,25 @@
-<p>game-board works!</p>
+<section class="game-wrapper">
+  <div class="game-interface">
+    <button (click)="startGame()">PLAY</button>
+  </div>
+  <div *ngIf="gameState$ | async as gameState" class="game-box">
+    <!--  todo players as components-->
+    <div
+      *ngIf="playerBottom$ | async as player"
+      [style.width]="player.width + 'px'"
+      [style.transform]="
+        'translateX(-50%) ' +
+         'translateX(' + player.position + 'px)'
+      "
+      class="player-side bottom"></div>
+    <!--    <div class="player-side right"></div>-->
+    <!--    <div class="player-side top"></div>-->
+    <!--    <div class="player-side left"></div>-->
+    <div class="game-ball"
+         [style.transition-duration]="(gameState.ballPosition.distance / gameState.ballSpeed) + 'ms'"
+         [style.transform]="
+            'translate3d(' + gameState.ballPosition.x + 'px,' + -gameState.ballPosition.y + 'px,0)'
+          "
+    ></div>
+  </div>
+</section>
