@@ -21,7 +21,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "retro-pong",
+            "prefix": "pong",
             "style": "kebab-case"
           }
         ]
