@@ -2,14 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
 import { Socket } from 'ngx-socket-io';
-import { map, merge, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, map, merge, Observable, ReplaySubject, tap, withLatestFrom } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  currentPlayerSide$ = new ReplaySubject<SideEnum | null>(1);
+  currentPlayerSide$ = new BehaviorSubject<SideEnum | null>(null);
 
   playerBottom$ = new ReplaySubject<PlayerInterface>(1);
   playerRight$ = new ReplaySubject<PlayerInterface>(1);

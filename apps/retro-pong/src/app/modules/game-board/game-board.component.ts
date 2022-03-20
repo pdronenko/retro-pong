@@ -44,9 +44,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.playerTop$ = this.gameService.playerTop$;
     this.playerLeft$ = this.gameService.playerLeft$;
 
-    this.subs.add(this.gameService.connect().subscribe());
     this.subs.add(this.gameService.getGameState().subscribe());
     this.subs.add(this.gameService.getPlayerState().subscribe());
+    this.subs.add(this.gameService.connect().subscribe());
     this.subs.add(
       this.gameService.currentPlayerSide$
         .pipe(filter((currentPlayerSide) => currentPlayerSide !== null && currentPlayerSide in SideEnum))

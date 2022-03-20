@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 import { Observable, Subscription } from 'rxjs';
 import { GameService } from '../../core/services/game.service';
@@ -7,7 +7,6 @@ import { GameService } from '../../core/services/game.service';
   selector: 'pong-status-bar',
   templateUrl: './status-bar.component.html',
   styleUrls: ['./status-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatusBarComponent implements OnInit, OnDestroy {
   playerBottom$: Observable<PlayerInterface>;

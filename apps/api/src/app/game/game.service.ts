@@ -8,11 +8,12 @@ import {
   SocketEventEnum,
 } from '@retro-pong/api-interfaces';
 import { Server } from 'socket.io';
+import { environment } from '../../environments/environment';
 import { Geometry } from './geometry';
 import { GameModel } from './shared/models/game.model';
 import { PlayerModel } from './shared/models/player.model';
 
-@WebSocketGateway()
+@WebSocketGateway(environment.wsPort)
 export class GameService {
   @WebSocketServer()
   private server: Server;
