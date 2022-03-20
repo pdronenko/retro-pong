@@ -10,7 +10,7 @@ import {
   SocketEventEnum,
 } from '@retro-pong/api-interfaces';
 
-@WebSocketGateway(8080)
+@WebSocketGateway(3000)
 export class GameService {
   @WebSocketServer()
   private server: Server;
