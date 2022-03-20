@@ -3,28 +3,15 @@ import { BallDirectionInterface, GameInterface, SideEnum } from '@retro-pong/api
 export class Geometry {
   static readonly fieldSize = 600;
   static readonly centerPosition = 300;
-  static readonly paddleShift = 20;
+  static readonly paddleShift = 15;
   static readonly ballSpeed = 0.5;
-  static readonly activePaddleWidth = 150;
+  static readonly activePaddleWidth = 200;
   static readonly countdown = 3;
 
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;
     const rightPlayerBorder = playerPosition + playerWidth / 2;
     return ballPosition < leftPlayerBorder || ballPosition > rightPlayerBorder;
-  }
-
-  private static calculateSide2Length(side1Length: number, angle: number): number {
-    return side1Length * Math.tan((angle * Math.PI) / 180);
-  }
-
-  private static addSide(side: SideEnum): SideEnum {
-    return (side + 1) % 4;
-  }
-
-  private static bouncedAngle(angle: number): number {
-    // todo normal angle calculation
-    return 180 - angle;
   }
 
   static calcBallNewDirection(gameState: GameInterface): BallDirectionInterface {
@@ -83,5 +70,22 @@ export class Geometry {
     const newDistance = Math.hypot(x2 - x1, y2 - y1); // todo slow?
 
     return { x: x2, y: y2, angle: newAngle + 90, distance: newDistance, side: nextSide };
+  }
+
+  private static randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  private static calculateSide2Length(side1Length: number, angle: number): number {
+    return side1Length * Math.tan((angle * Math.PI) / 180);
+  }
+
+  private static addSide(side: SideEnum): SideEnum {
+    return (side + 1) % 4;
+  }
+
+  private static bouncedAngle(angle: number): number {
+    // todo normal angle calculation
+    return 180 - angle;
   }
 }
