@@ -27,10 +27,7 @@ export class GeometryService {
     const newAngle = GeometryService.bouncedAngle(ballDirectionDegree);
     let tan = Math.tan((newAngle * Math.PI) / 180);
 
-    // todo refactor, if top - next will be left or bottom
     let nextSide: SideEnum = GeometryService.addSide(currentSide);
-    // todo next side enum
-    // todo add field to state? to minimize switch
     let triangleSideLength: number;
     let x2: number, y2: number;
     switch (currentSide) {

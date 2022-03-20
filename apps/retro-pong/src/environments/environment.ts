@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  socketPort: 3000,
+  socketPort: 4200,
 };
 
 /*
