@@ -8,8 +8,8 @@
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
-    "build:fe:production": "ng build --prod api",
-    "build:be:production": "npm run ng -- build retro-pong --prod",
+    "build:be:production": "ng build --prod api",
+    "build:fe:production": "npm run ng -- build retro-pong --prod",
     "start:fe": "ng serve retro-pong",
     "start:be": "ng serve api",
     "start:develop": "run-p start:fe start:be",

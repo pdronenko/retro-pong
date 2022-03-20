@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiRoutesEnum, GameStateInterface, PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 
 import { GameService } from './game/game.service';
@@ -18,7 +18,9 @@ export class AppController {
   }
 
   @Post(ApiRoutesEnum.GAME)
-  startGame(): void {
-    this.gameService.startGame();
+  startGame(@Body() body: { side: SideEnum }): { side } {
+    const { side } = body;
+    this.gameService.startGame(side);
+    return { side };
   }
 }

@@ -10,6 +10,7 @@ import { GameModule } from './game/game.module';
     GameModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'retro-pong'),
+      renderPath: 'root',
     }),
   ],
   controllers: [AppController],

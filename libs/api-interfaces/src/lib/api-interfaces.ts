@@ -1,7 +1,7 @@
 export interface GameStateInterface {
   ballPosition: BallPositionInterface;
   ballSpeed: number;
-  gameOver: boolean;
+  status: GameStatusEnum;
 }
 
 export interface PlayerInterface {
@@ -44,6 +44,11 @@ export enum ArrowDirectionEnum {
   RIGHT = 'right',
   UP = 'up',
   DOWN = 'down',
+}
+
+export enum GameStatusEnum {
+  IDLE = 'idle',
+  PLAYING = 'playing',
 }
 
 export enum ApiRoutesEnum {

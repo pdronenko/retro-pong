@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameStateInterface, PlayerInterface, SideEnum, SocketEventEnum } from '@retro-pong/api-interfaces';
 import { Socket } from 'ngx-socket-io';
-import { BehaviorSubject, Observable, ReplaySubject, tap } from 'rxjs';
+import { Observable, ReplaySubject, tap } from 'rxjs';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -20,10 +20,10 @@ export class GameService {
 
   constructor(private socket: Socket, private httpClient: HttpClient, private apiService: ApiService) {}
 
-  startGame(playerSide: SideEnum): Observable<string> {
+  startGame(playerSide: SideEnum): Observable<{ side: SideEnum }> {
     return this.apiService
       .postStartGame(playerSide)
-      .pipe(tap((response) => response === 'OK' && this.currentPlayerSide$.next(playerSide)));
+      .pipe(tap((response) => this.currentPlayerSide$.next(response?.side)));
   }
 
   getGameState(): Observable<GameStateInterface> {
@@ -43,9 +43,6 @@ export class GameService {
 
   connect(): void {
     this.socket.on(SocketEventEnum.GAME_UPDATE, (payload: GameStateInterface) => {
-      if (payload.gameOver) {
-        alert('GAME OVER');
-      }
       this.gameState$.next(payload);
     });
 

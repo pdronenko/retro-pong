@@ -11,8 +11,8 @@ export class ApiService {
 
   constructor(private httpClient: HttpClient) {}
 
-  postStartGame(playerSide: SideEnum): Observable<string> {
-    return this.httpClient.post<string>(`${this.baseHref}/${ApiRoutesEnum.GAME}`, playerSide);
+  postStartGame(playerSide: SideEnum): Observable<{ side: SideEnum }> {
+    return this.httpClient.post<{ side: SideEnum }>(`${this.baseHref}/${ApiRoutesEnum.GAME}`, { side: playerSide });
   }
 
   getGameState(): Observable<GameStateInterface> {

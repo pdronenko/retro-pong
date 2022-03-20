@@ -6,10 +6,15 @@
   align-items: center;
   justify-content: center;
 
+  &:not(:last-child) {
+    border-right: 2px solid black;
+  }
+
   .player-color {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     margin-right: 10px;
+    border: 2px solid black;
   }
 
   &.bottom .player-color {
@@ -30,5 +35,6 @@
 
   .player-name {
     font-size: 10px;
+    margin: 0;
   }
 }
