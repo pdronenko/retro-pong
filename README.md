@@ -13,6 +13,11 @@ Frontend just for a view, all logic is on the backend side.
 ## Try it
 Open on [Heroku](https://retro-pong.herokuapp.com/)
 
+## Roadmap
+
+- Fix ball angle calculation on the backend side
+- Add sounds to ball bounce, game statuses
+
 ![plot](./apps/retro-pong/src/assets/images/gameplay.png)
 ## Development server
 
