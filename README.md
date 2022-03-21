@@ -4,11 +4,12 @@
 
 Network capable Pong.
 
-This project was generated using [Nx](https://nx.dev).
+- Nx mono repository, Angular 13 for the frontend, NestJS 8 for the backend
+- CI/CD based on Heroku+Github, deploying on every main branch push
+- All of the player and ball positions logic is located on the backend side, frontend is just for displaying data
+- Position data sending/receiving via WebSockets
+- 55+ FPS during the game - frontend is fully optimized, no extra angular change detections
 
-Frontend part - Angular 13. Backend - NestJS 8.
-
-Frontend just for a view, all logic is on the backend side.
 
 ## Try it
 Open on [Heroku](https://retro-pong.herokuapp.com/)
