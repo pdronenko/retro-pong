@@ -4,16 +4,14 @@ export class Geometry {
   static readonly fieldSize = 600;
   static readonly centerPosition = 300;
   static readonly paddleShift = 45;
-  static readonly ballSpeed = 0.5;
+  static readonly ballSpeed = 0.3;
   static readonly activePaddleWidth = 200;
   static readonly countdown = 3;
 
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;
     const rightPlayerBorder = playerPosition + playerWidth / 2;
-    return (
-      ballPosition < leftPlayerBorder - Geometry.paddleShift || ballPosition > rightPlayerBorder + Geometry.paddleShift
-    );
+    return ballPosition < leftPlayerBorder || ballPosition > rightPlayerBorder;
   }
 
   static calcBallNewDirection(gameState: GameInterface): BallDirectionInterface {
