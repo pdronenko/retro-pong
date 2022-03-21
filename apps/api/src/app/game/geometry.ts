@@ -3,7 +3,7 @@ import { BallDirectionInterface, GameInterface, SideEnum } from '@retro-pong/api
 export class Geometry {
   static readonly fieldSize = 600;
   static readonly centerPosition = 300;
-  static readonly paddleShift = 15;
+  static readonly paddleShift = 45;
   static readonly ballSpeed = 0.5;
   static readonly activePaddleWidth = 200;
   static readonly countdown = 3;

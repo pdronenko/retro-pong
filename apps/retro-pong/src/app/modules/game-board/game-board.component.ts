@@ -84,7 +84,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         switchMap((event) => {
           if (event.type === 'keydown') {
             const direction = directionMapper[event.key as KeyboardEventEnum];
-            return timer(0, 50).pipe(map(() => direction));
+            return timer(0, 150).pipe(map(() => direction));
           } else {
             return EMPTY;
           }
