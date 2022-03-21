@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class SoundService {
-  private soundLevel = 0.3;
+  private soundLevel = 0.1;
   private backgroundMusic = new Audio('../../../assets/sounds/background_music_short.mp3');
   private wallBounceSound = new Audio('../../../assets/sounds/wall_bounce.wav');
 
