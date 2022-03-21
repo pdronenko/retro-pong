@@ -32,4 +32,16 @@
     flex-wrap: nowrap;
     justify-content: space-around;
   }
+
+  .music-button {
+    position: absolute;
+    left: 11.5px;
+    top: 11px;
+    padding: 0;
+
+    img {
+      pointer-events: none;
+      padding: 5px;
+    }
+  }
 }

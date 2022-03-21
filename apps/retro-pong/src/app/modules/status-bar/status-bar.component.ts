@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PlayerInterface, SideEnum } from '@retro-pong/api-interfaces';
 import { Observable, Subscription } from 'rxjs';
 import { GameService } from '../../core/services/game.service';
+import { SoundService } from '../../core/services/sound.service';
 
 @Component({
   selector: 'pong-status-bar',
@@ -15,10 +16,11 @@ export class StatusBarComponent implements OnInit, OnDestroy {
   playerLeft$: Observable<PlayerInterface>;
   playing = false;
   playingSide: SideEnum | null;
+  isMusicPlaying = false;
 
   private subs = new Subscription();
 
-  constructor(private gameService: GameService) {}
+  constructor(private gameService: GameService, private soundService: SoundService) {}
 
   ngOnInit(): void {
     this.subs.add(
@@ -39,5 +41,15 @@ export class StatusBarComponent implements OnInit, OnDestroy {
 
   startGame(side: SideEnum): void {
     this.subs.add(this.gameService.startGame(side).subscribe());
+  }
+
+  toggleMusic(): void {
+    if (this.isMusicPlaying) {
+      this.soundService.pauseBackgroundMusic();
+      this.isMusicPlaying = false;
+    } else {
+      this.soundService.playBackgroundMusic();
+      this.isMusicPlaying = true;
+    }
   }
 }

@@ -1,4 +1,8 @@
 <h1 class="heading">Retro Pong</h1>
+<button class="music-button" (click)="toggleMusic()">
+  <img width="21" height="21" [hidden]="isMusicPlaying" src="../../../assets/images/play_icon.png" alt="Play music">
+  <img width="21" height="21" [hidden]="!isMusicPlaying" src="../../../assets/images/stop_icon.png" alt="Stop music">
+</button>
 <a class="github-link" href="https://github.com/pdronenko/retro-pong" target='_blank'>
   <i class="nes-icon github"></i>
 </a>
