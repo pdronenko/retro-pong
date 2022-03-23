@@ -73,7 +73,7 @@ export class GameService {
   }
 
   private setNewBallCoordinates(gameState: GameInterface): void {
-    const newPosition = Geometry.calcBallNewDirection(gameState);
+    const newPosition = Geometry.calcBallNewDirection(gameState.ballDirection);
     this.gameState.ballDirection = newPosition;
     this.server.emit(SocketEventEnum.GAME_UPDATE, this.gameState);
     setTimeout(() => {

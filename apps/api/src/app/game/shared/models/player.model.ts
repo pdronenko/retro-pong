@@ -12,7 +12,7 @@ export class PlayerModel implements PlayerInterface {
   active = false;
   axis: 'x' | 'y';
   name: string;
-  position = Geometry.centerPosition;
+  position = Geometry.fieldSize / 2;
   side: SideEnum;
   width = Geometry.fieldSize;
 
@@ -25,7 +25,7 @@ export class PlayerModel implements PlayerInterface {
   reset(): void {
     this.active = false;
     this.width = Geometry.fieldSize;
-    this.position = Geometry.centerPosition;
+    this.position = Geometry.fieldSize / 2;
   }
 
   activate(): void {

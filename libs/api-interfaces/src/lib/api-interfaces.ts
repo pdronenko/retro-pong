@@ -25,7 +25,6 @@ export interface BallDirectionInterface {
   y: number;
   distance: number;
   side: SideEnum;
-  angle: number;
 }
 
 export enum SideEnum {

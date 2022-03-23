@@ -1,25 +1,26 @@
-import { GameInterface, GameStatusEnum, SideEnum } from '@retro-pong/api-interfaces';
+import { BallDirectionInterface, GameInterface, GameStatusEnum, SideEnum } from '@retro-pong/api-interfaces';
 import { Observable, take, tap, timer } from 'rxjs';
 import { Geometry } from '../../geometry';
 
 export class GameModel implements GameInterface {
-  ballDirection = {
-    x: Geometry.centerPosition,
-    y: Geometry.centerPosition,
+  private readonly defaultBallDirection: BallDirectionInterface = {
+    x: Geometry.fieldSize / 2 - 50, // todo random
+    y: Geometry.fieldSize / 2 + 50,
     distance: 0,
-    angle: 160,
     side: SideEnum.BOTTOM,
   };
+
+  ballDirection: BallDirectionInterface = { ...this.defaultBallDirection };
   ballSpeed = Geometry.ballSpeed;
   status = GameStatusEnum.IDLE;
   activePlayersCount = 0;
   count = null;
 
   reset(): void {
+    this.ballDirection = { ...this.defaultBallDirection };
     this.status = GameStatusEnum.IDLE;
-    this.ballDirection.x = Geometry.centerPosition;
-    this.ballDirection.y = Geometry.centerPosition;
-    this.ballDirection.distance = 0;
+    Geometry.xDirection = 2;
+    Geometry.yDirection = 2;
   }
 
   startWithDelay(): Observable<number> {

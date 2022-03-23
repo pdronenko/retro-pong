@@ -1,12 +1,21 @@
-import { BallDirectionInterface, GameInterface, SideEnum } from '@retro-pong/api-interfaces';
+import { BallDirectionInterface, SideEnum } from '@retro-pong/api-interfaces';
 
 export class Geometry {
   static readonly fieldSize = 600;
-  static readonly centerPosition = 300;
   static readonly paddleShift = 45;
-  static readonly ballSpeed = 0.3;
+  static readonly ballSpeed = 0.5;
   static readonly activePaddleWidth = 200;
   static readonly countdown = 3;
+
+  static xDirection = 2;
+  static yDirection = 2;
+
+  static sideMapper = [
+    { check: (x, y) => y === Geometry.fieldSize, side: SideEnum.TOP },
+    { check: (x) => x === Geometry.fieldSize, side: SideEnum.RIGHT },
+    { check: (x, y) => y === 0, side: SideEnum.BOTTOM },
+    { check: () => true, side: SideEnum.LEFT },
+  ];
 
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;
@@ -14,80 +23,30 @@ export class Geometry {
     return ballPosition < leftPlayerBorder || ballPosition > rightPlayerBorder;
   }
 
-  static calcBallNewDirection(gameState: GameInterface): BallDirectionInterface {
-    const { x: x1, y: y1, angle: ballDirectionDegree, side: currentSide } = gameState.ballDirection;
-    const newAngle = Geometry.bouncedAngle(ballDirectionDegree);
-    let tan = Math.tan((newAngle * Math.PI) / 180);
+  static calcBallNewDirection(ballDirection: BallDirectionInterface): BallDirectionInterface {
+    const { x: x1, y: y1 } = ballDirection;
 
-    let nextSide: SideEnum = Geometry.addSide(currentSide);
-    let triangleSideLength: number;
-    let x2: number, y2: number;
-    switch (currentSide) {
-      case SideEnum.BOTTOM:
-        triangleSideLength = (Geometry.fieldSize - x1) * tan;
-        x2 = Geometry.fieldSize;
-        y2 = triangleSideLength;
-        if (y2 > Geometry.fieldSize) {
-          x2 = Geometry.calculateSide2Length(Math.abs(y2), 90 - newAngle);
-          y2 = Geometry.fieldSize;
-          nextSide = Geometry.addSide(nextSide);
-        }
+    let x2 = x1;
+    let y2 = y1;
+    for (;;) {
+      if (x2 + Geometry.xDirection > Geometry.fieldSize || x2 + Geometry.xDirection < 0) {
+        Geometry.xDirection = -Geometry.xDirection;
         break;
-      case SideEnum.RIGHT:
-        triangleSideLength = (Geometry.fieldSize - y1) * tan;
-        x2 = Geometry.fieldSize - triangleSideLength;
-        y2 = Geometry.fieldSize;
-        if (x2 < 0) {
-          y2 = Geometry.fieldSize - Geometry.calculateSide2Length(Math.abs(x2), 90 - newAngle);
-          x2 = 0;
-          nextSide = Geometry.addSide(nextSide);
-        }
+      } else if (y2 + Geometry.yDirection > Geometry.fieldSize || y2 + Geometry.yDirection < 0) {
+        Geometry.yDirection = -Geometry.yDirection;
         break;
-      case SideEnum.TOP:
-        triangleSideLength = x1 * tan;
-        x2 = 0;
-        y2 = Geometry.fieldSize - triangleSideLength;
-        if (y2 < 0) {
-          x2 = Geometry.calculateSide2Length(Math.abs(y2), 90 - newAngle);
-          y2 = 0;
-          nextSide = Geometry.addSide(nextSide);
-        }
-        break;
-      case SideEnum.LEFT:
-        tan = Math.tan(((newAngle < 90 ? 90 - newAngle : newAngle) * Math.PI) / 180);
-        triangleSideLength = (Geometry.fieldSize - y1) * tan;
-        x2 = triangleSideLength;
-        y2 = 0;
-        if (x2 > Geometry.fieldSize) {
-          y2 =
-            Geometry.fieldSize - Geometry.calculateSide2Length(Math.abs(x2 - Geometry.fieldSize), 90 - (90 - newAngle));
-          x2 = Geometry.fieldSize;
-          nextSide = Geometry.addSide(nextSide);
-        }
-        break;
+      }
+
+      x2 += Geometry.xDirection;
+      y2 += Geometry.yDirection;
     }
 
-    const newDistance = Math.hypot(x2 - x1, y2 - y1); // todo slow?
-
-    return { x: x2, y: y2, angle: newAngle + 90, distance: newDistance, side: nextSide };
+    const distance = Math.hypot(x2 - x1, y2 - y1);
+    const side = Geometry.sideMapper.find(({ check }) => check(x2, y2)).side;
+    return { x: x2, y: y2, distance, side };
   }
 
   private static randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
-  private static calculateSide2Length(side1Length: number, angle: number): number {
-    return side1Length * Math.tan((angle * Math.PI) / 180);
-  }
-
-  private static addSide(side: SideEnum): SideEnum {
-    return (side + 1) % 4;
-  }
-
-  private static bouncedAngle(angle: number): number {
-    const bouncedAngle = 180 - angle;
-    const randomNum = Geometry.randomIntFromInterval(1, 20);
-    return bouncedAngle < 30 ? bouncedAngle + randomNum : bouncedAngle - randomNum;
-    // todo normal angle calculation
   }
 }
