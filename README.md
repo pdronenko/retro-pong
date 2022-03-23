@@ -16,7 +16,6 @@ Open on [Heroku](https://retro-pong.herokuapp.com/)
 
 ## Roadmap
 
-- Fix ball angle calculation on the backend side
 - Optimize socket message count to reduce gameplay lag
 - Add sounds to ball bounce, game statuses
 
