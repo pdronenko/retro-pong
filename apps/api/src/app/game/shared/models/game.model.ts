@@ -25,7 +25,7 @@ export class GameModel implements GameInterface {
   startWithDelay(): Observable<number> {
     this.status = GameStatusEnum.COUNTING;
     return timer(0, 1000).pipe(
-      take(4),
+      take(Geometry.countdown + 1),
       tap((num) => {
         if (num < Geometry.countdown) {
           this.count = Geometry.countdown - num;
