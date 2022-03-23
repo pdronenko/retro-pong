@@ -51,7 +51,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.subs.add(this.gameService.connect().subscribe());
     this.subs.add(
       this.gameService.currentPlayerSide$
-        .pipe(filter((currentPlayerSide) => currentPlayerSide !== null && currentPlayerSide in SideEnum))
+        .pipe(
+          tap((currentPlayerSide) => currentPlayerSide === null && this.keySub?.unsubscribe()),
+          filter((currentPlayerSide) => currentPlayerSide !== null && currentPlayerSide in SideEnum)
+        )
         .subscribe((side) => {
           this.currentPlayerSide = side;
           this.zone.runOutsideAngular(() => {

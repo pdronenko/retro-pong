@@ -19,8 +19,6 @@ export class GameModel implements GameInterface {
   reset(): void {
     this.ballDirection = { ...this.defaultBallDirection };
     this.status = GameStatusEnum.IDLE;
-    Geometry.xDirection = 2;
-    Geometry.yDirection = 2;
   }
 
   startWithDelay(): Observable<number> {

@@ -3,7 +3,7 @@ import { BallDirectionInterface, SideEnum } from '@retro-pong/api-interfaces';
 export class Geometry {
   static readonly fieldSize = 600;
   static readonly paddleShift = 45;
-  static readonly ballSpeed = 0.5;
+  static readonly ballSpeed = 0.3;
   static readonly activePaddleWidth = 200;
   static readonly countdown = 3;
 
@@ -20,14 +20,16 @@ export class Geometry {
   static isPlayerMissedTheBall(playerWidth: number, playerPosition: number, ballPosition: number): boolean {
     const leftPlayerBorder = playerPosition - playerWidth / 2;
     const rightPlayerBorder = playerPosition + playerWidth / 2;
-    return ballPosition < leftPlayerBorder || ballPosition > rightPlayerBorder;
+    return ballPosition < leftPlayerBorder - 10 || ballPosition > rightPlayerBorder + 10;
   }
 
   static calcBallNewDirection(ballDirection: BallDirectionInterface): BallDirectionInterface {
     const { x: x1, y: y1 } = ballDirection;
 
-    let x2 = x1;
-    let y2 = y1;
+    const randomX = Geometry.randomIntFromInterval(-80, 80);
+    const randomY = Geometry.randomIntFromInterval(-80, 80);
+    let x2 = Math.max(x1 - randomX > Geometry.fieldSize ? Geometry.fieldSize : x1 - randomX, 0);
+    let y2 = Math.max(y1 - randomY > Geometry.fieldSize ? Geometry.fieldSize : y1 - randomY, 0);
     for (;;) {
       if (x2 + Geometry.xDirection > Geometry.fieldSize || x2 + Geometry.xDirection < 0) {
         Geometry.xDirection = -Geometry.xDirection;

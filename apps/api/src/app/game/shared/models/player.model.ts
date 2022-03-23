@@ -33,14 +33,11 @@ export class PlayerModel implements PlayerInterface {
     this.width = Geometry.activePaddleWidth;
   }
 
-  updatePlayerPosition(dir: ArrowDirectionEnum): PlayerInterface {
-    const newPosition = this.position + PlayerModel.paddleShiftMapper[dir];
-    const leftPlayerBorder = newPosition - this.width / 2;
-    const rightPlayerBorder = newPosition + this.width / 2;
-    if (leftPlayerBorder < 0 || rightPlayerBorder > Geometry.fieldSize) {
-      return null;
-    }
-    this.position += PlayerModel.paddleShiftMapper[dir];
-    return this;
+  updatePlayerPosition(dir: ArrowDirectionEnum): number {
+    const shifted = this.position + PlayerModel.paddleShiftMapper[dir];
+    const halfPaddle = this.width / 2;
+    const newPosition = Math.min(shifted < halfPaddle ? halfPaddle : shifted, Geometry.fieldSize - halfPaddle);
+    const isChanged = newPosition !== this.position;
+    return isChanged ? (this.position = newPosition) : null;
   }
 }

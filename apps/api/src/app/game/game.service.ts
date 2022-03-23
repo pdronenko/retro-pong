@@ -29,9 +29,9 @@ export class GameService {
 
   @SubscribeMessage(SocketEventEnum.PLAYER_UPDATE)
   updatePlayer(@MessageBody() payload: PlayerPayloadInterface): void {
-    const updatedPlayer = this.players[payload.side].updatePlayerPosition(payload.dir);
-    if (updatedPlayer) {
-      this.server.emit(SocketEventEnum.PLAYER_UPDATE, updatedPlayer);
+    const newPosition = this.players[payload.side].updatePlayerPosition(payload.dir);
+    if (newPosition) {
+      this.server.emit(SocketEventEnum.PLAYER_UPDATE, this.players[payload.side]);
     }
   }
 
