@@ -2,7 +2,6 @@ export interface GameInterface {
   ballDirection: BallDirectionInterface;
   ballSpeed: number;
   status: GameStatusEnum;
-  activePlayersCount: number;
   count: number;
 }
 

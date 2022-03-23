@@ -13,7 +13,6 @@ export class GameModel implements GameInterface {
   ballDirection: BallDirectionInterface = { ...GameModel.defaultBallDirection };
   ballSpeed = Geometry.ballSpeed;
   status = GameStatusEnum.IDLE;
-  activePlayersCount = 0;
   count = null;
 
   reset(): void {
