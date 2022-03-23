@@ -7,8 +7,8 @@ export class Geometry {
   static readonly activePaddleWidth = 200;
   static readonly countdown = 3;
 
-  static xDirection = 2;
-  static yDirection = 2;
+  static xDirection = 1;
+  static yDirection = 1;
 
   static sideMapper = [
     { check: (x, y) => y === Geometry.fieldSize, side: SideEnum.TOP },
@@ -28,8 +28,8 @@ export class Geometry {
 
     const randomX = Geometry.randomIntFromInterval(-80, 80);
     const randomY = Geometry.randomIntFromInterval(-80, 80);
-    let x2 = Math.max(x1 - randomX > Geometry.fieldSize ? Geometry.fieldSize : x1 - randomX, 0);
-    let y2 = Math.max(y1 - randomY > Geometry.fieldSize ? Geometry.fieldSize : y1 - randomY, 0);
+    let x2 = Math.max(x1 - randomX > Geometry.fieldSize ? Geometry.fieldSize : x1 - randomX, 5);
+    let y2 = Math.max(y1 - randomY > Geometry.fieldSize ? Geometry.fieldSize : y1 - randomY, 5);
     for (;;) {
       if (x2 + Geometry.xDirection > Geometry.fieldSize || x2 + Geometry.xDirection < 0) {
         Geometry.xDirection = -Geometry.xDirection;
