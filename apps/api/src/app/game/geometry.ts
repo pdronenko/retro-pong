@@ -26,8 +26,8 @@ export class Geometry {
   static calcBallNewDirection(ballDirection: BallDirectionInterface): BallDirectionInterface {
     const { x: x1, y: y1 } = ballDirection;
 
-    const randomX = Geometry.randomIntFromInterval(-80, 80);
-    const randomY = Geometry.randomIntFromInterval(-80, 80);
+    const randomX = Geometry.randomIntFromInterval(-150, 150);
+    const randomY = Geometry.randomIntFromInterval(-150, 150);
     let x2 = Math.max(x1 - randomX > Geometry.fieldSize ? Geometry.fieldSize : x1 - randomX, 5);
     let y2 = Math.max(y1 - randomY > Geometry.fieldSize ? Geometry.fieldSize : y1 - randomY, 5);
     for (;;) {
