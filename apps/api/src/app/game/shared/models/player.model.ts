@@ -2,6 +2,8 @@ import { ArrowDirectionEnum, PlayerInterface, SideEnum } from '@retro-pong/api-i
 import { Geometry } from '../../geometry';
 
 export class PlayerModel implements PlayerInterface {
+  private static defaultLivesCount = 3;
+
   private static readonly paddleShiftMapper = {
     [ArrowDirectionEnum.LEFT]: -Geometry.paddleShift,
     [ArrowDirectionEnum.RIGHT]: Geometry.paddleShift,
@@ -15,6 +17,7 @@ export class PlayerModel implements PlayerInterface {
   position = Geometry.fieldSize / 2;
   side: SideEnum;
   width = Geometry.fieldSize;
+  lives = 0;
 
   constructor(name: string, axis: 'x' | 'y', side: SideEnum) {
     this.name = name;
@@ -23,13 +26,17 @@ export class PlayerModel implements PlayerInterface {
   }
 
   reset(): void {
-    this.active = false;
-    this.width = Geometry.fieldSize;
-    this.position = Geometry.fieldSize / 2;
+    this.lives = Math.max(this.lives - 1, 0);
+    if (this.lives <= 0) {
+      this.active = false;
+      this.width = Geometry.fieldSize;
+      this.position = Geometry.fieldSize / 2;
+    }
   }
 
   activate(): void {
     this.active = true;
+    this.lives = PlayerModel.defaultLivesCount;
     this.width = Geometry.activePaddleWidth;
   }
 

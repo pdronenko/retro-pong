@@ -1,4 +1,6 @@
-<div class="player-color bottom"></div>
+<div class="player-color bottom">
+  <p *ngIf="player.lives" class="player-lives">{{player.lives}}</p>
+</div>
 <button [disabled]="disabled" type="button" class="nes-btn" (click)="startGame.emit(player.side)"
         [class.is-disabled]="disabled" *ngIf="!player.active; else playerName">JOIN</button>
 <ng-template #playerName>

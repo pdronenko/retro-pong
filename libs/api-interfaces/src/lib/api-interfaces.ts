@@ -12,6 +12,7 @@ export interface PlayerInterface {
   name: string;
   axis: 'x' | 'y';
   active: boolean;
+  lives: number;
 }
 
 export interface PlayerPayloadInterface {
